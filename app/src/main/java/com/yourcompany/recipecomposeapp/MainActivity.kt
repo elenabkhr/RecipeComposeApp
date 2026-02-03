@@ -9,14 +9,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
-import com.yourcompany.recipecomposeapp.ui.theme.RecipeComposeAppTheme
+import com.yourcompany.recipecomposeapp.ui.theme.RecipesAppTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            RecipeComposeAppTheme {
+            RecipesAppTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { paddingValues ->
                     Text(
                         text = "Recipes App",

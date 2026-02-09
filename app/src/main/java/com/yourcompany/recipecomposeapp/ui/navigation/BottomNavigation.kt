@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.yourcompany.recipecomposeapp.ui.theme.RecipesAppTheme
 import com.yourcompany.recipecomposeapp.ui.theme.recipesAppTypography
 
@@ -32,46 +33,49 @@ fun BottomNavigation(
         modifier = Modifier
             .padding(horizontal = 16.dp, vertical = 8.dp)
             .fillMaxWidth()
-            .height(52.dp),
+            .navigationBarsPadding(),
         horizontalArrangement = Arrangement.Center,
     ) {
-        CategoriesButton(onClick = onCategoriesClick)
+        CategoriesButton(onClick = onCategoriesClick, Modifier.weight(1f))
 
         Spacer(modifier = Modifier.width(4.dp))
 
-        FavoritesButton(onClick = onFavoritesClick)
+        FavoritesButton(onClick = onFavoritesClick, Modifier.weight(1f))
     }
 }
 
 @Composable
-fun CategoriesButton(onClick: () -> Unit) {
+fun CategoriesButton(onClick: () -> Unit, modifier: Modifier) {
     Button(
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(
             MaterialTheme.colorScheme.tertiary
         ),
         shape = RoundedCornerShape(8.dp),
-        modifier = Modifier
+        modifier = modifier,
     ) {
         Text(
             "КАТЕГОРИИ",
             style = recipesAppTypography.titleMedium,
+            fontSize = 14.sp
         )
     }
 }
 
 @Composable
-fun FavoritesButton(onClick: () -> Unit) {
+fun FavoritesButton(onClick: () -> Unit, modifier: Modifier) {
     Button(
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(
             MaterialTheme.colorScheme.error
         ),
         shape = RoundedCornerShape(8.dp),
+        modifier = modifier,
     ) {
         Text(
             "ИЗБРАННОЕ",
-            style = recipesAppTypography.titleMedium
+            style = recipesAppTypography.titleMedium,
+            fontSize = 14.sp
         )
 
         Spacer(modifier = Modifier.width(10.dp))

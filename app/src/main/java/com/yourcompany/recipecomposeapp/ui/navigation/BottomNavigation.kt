@@ -18,9 +18,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.yourcompany.recipecomposeapp.ui.theme.RecipesAppTheme
 import com.yourcompany.recipecomposeapp.ui.theme.recipesAppTypography
 
@@ -55,9 +55,8 @@ fun CategoriesButton(onClick: () -> Unit, modifier: Modifier) {
         modifier = modifier,
     ) {
         Text(
-            "КАТЕГОРИИ",
+            text = stringResource(id = R.string.categories_header).uppercase(),
             style = recipesAppTypography.titleMedium,
-            fontSize = 14.sp
         )
     }
 }
@@ -73,9 +72,8 @@ fun FavoritesButton(onClick: () -> Unit, modifier: Modifier) {
         modifier = modifier,
     ) {
         Text(
-            "ИЗБРАННОЕ",
+            text = stringResource(id = R.string.favorites_header).uppercase(),
             style = recipesAppTypography.titleMedium,
-            fontSize = 14.sp
         )
 
         Spacer(modifier = Modifier.width(10.dp))

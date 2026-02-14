@@ -1,32 +1,32 @@
-package com.yourcompany.recipecomposeapp.ui.categories
+package com.yourcompany.recipecomposeapp.ui.favorites
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import com.yourcompany.recipecomposeapp.R
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.yourcompany.recipecomposeapp.ui.theme.RecipesAppTheme
+import com.yourcompany.recipecomposeapp.R
 import com.yourcompany.recipecomposeapp.core.ui.ScreenHeader
+import com.yourcompany.recipecomposeapp.ui.theme.RecipesAppTheme
 
 @Composable
-fun CategoriesScreen(modifier: Modifier = Modifier) {
+fun FavoritesScreen(modifier: Modifier = Modifier) {
     Column(modifier = modifier) {
         ScreenHeader(
-            text = stringResource(id = R.string.categories_header),
-            painterResource(id = R.drawable.bcg_categories)
+            text = stringResource(id = R.string.favorites_header),
+            painterResource(id = R.drawable.bcg_favorites)
         )
-        CategoriesItem()
+        FavoritesItem()
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-private fun CategoriesScreenPreviewLight() {
+private fun FavoritesScreenPreviewLight() {
     RecipesAppTheme(darkTheme = false) {
-        CategoriesScreen(
+        FavoritesScreen(
             modifier = Modifier.fillMaxSize()
         )
     }
@@ -34,10 +34,11 @@ private fun CategoriesScreenPreviewLight() {
 
 @Preview(showBackground = true)
 @Composable
-private fun CategoriesScreenPreviewDark() {
+private fun FavoritesScreenPreviewDark() {
     RecipesAppTheme(darkTheme = true) {
-        CategoriesScreen(
+        FavoritesScreen(
             modifier = Modifier.fillMaxSize()
         )
     }
 }
+

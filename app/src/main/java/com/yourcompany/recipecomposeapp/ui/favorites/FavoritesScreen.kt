@@ -16,7 +16,7 @@ fun FavoritesScreen(modifier: Modifier = Modifier) {
     Column(modifier = modifier) {
         ScreenHeader(
             text = stringResource(id = R.string.favorites_header),
-            painterResource(id = R.drawable.bcg_favorites)
+            painter = painterResource(id = R.drawable.bcg_favorites)
         )
         FavoritesItem()
     }

@@ -16,7 +16,7 @@ fun CategoriesScreen(modifier: Modifier = Modifier) {
     Column(modifier = modifier) {
         ScreenHeader(
             text = stringResource(id = R.string.categories_header),
-            painterResource(id = R.drawable.bcg_categories)
+            painter = painterResource(id = R.drawable.bcg_categories)
         )
         CategoriesItem()
     }

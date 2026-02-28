@@ -9,7 +9,6 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import com.yourcompany.recipecomposeapp.R
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -20,8 +19,10 @@ import com.yourcompany.recipecomposeapp.data.repository.RecipeRepositoryStub
 import com.yourcompany.recipecomposeapp.ui.categories.model.toUiModel
 
 @Composable
-fun CategoriesScreen(modifier: Modifier = Modifier) {
-
+fun CategoriesScreen(
+    modifier: Modifier = Modifier,
+    onCategoryClick: (Int) -> Unit,
+) {
     val categories = RecipeRepositoryStub
         .getCategories()
         .map { it.toUiModel() }
@@ -29,20 +30,19 @@ fun CategoriesScreen(modifier: Modifier = Modifier) {
     Column(modifier = modifier) {
         ScreenHeader(
             text = stringResource(id = R.string.categories_header),
-            painter = painterResource(id = R.drawable.bcg_categories)
+            image =
         )
         LazyVerticalGrid(
             GridCells.Fixed(2),
             contentPadding = PaddingValues(top = 16.dp, start = 16.dp, end = 16.dp, bottom = 8.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp),
+            modifier = Modifier.fillMaxSize()
         ) {
             items(categories) { category ->
                 CategoryItem(
-                    title = category.title,
-                    description = category.description,
-                    urlImage = category.imageUrl,
-                    onClick = {},
+                    category = category,
+                    onClick = onCategoryClick,
                 )
             }
         }
@@ -54,7 +54,8 @@ fun CategoriesScreen(modifier: Modifier = Modifier) {
 private fun CategoriesScreenPreviewLight() {
     RecipesAppTheme(darkTheme = false) {
         CategoriesScreen(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize(),
+            onCategoryClick = {},
         )
     }
 }
@@ -64,7 +65,8 @@ private fun CategoriesScreenPreviewLight() {
 private fun CategoriesScreenPreviewDark() {
     RecipesAppTheme(darkTheme = true) {
         CategoriesScreen(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize(),
+            onCategoryClick = {},
         )
     }
 }

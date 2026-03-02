@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import com.yourcompany.recipecomposeapp.R
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -21,7 +22,7 @@ import com.yourcompany.recipecomposeapp.ui.categories.model.toUiModel
 @Composable
 fun CategoriesScreen(
     modifier: Modifier = Modifier,
-    onCategoryClick: (Int) -> Unit,
+    onCategoryClick: (Int, String) -> Unit,
 ) {
     val categories = RecipeRepositoryStub
         .getCategories()
@@ -30,7 +31,7 @@ fun CategoriesScreen(
     Column(modifier = modifier) {
         ScreenHeader(
             text = stringResource(id = R.string.categories_header),
-            image =
+            painter = painterResource(id = R.drawable.bcg_categories)
         )
         LazyVerticalGrid(
             GridCells.Fixed(2),
@@ -55,7 +56,7 @@ private fun CategoriesScreenPreviewLight() {
     RecipesAppTheme(darkTheme = false) {
         CategoriesScreen(
             modifier = Modifier.fillMaxSize(),
-            onCategoryClick = {},
+            onCategoryClick = { _, _ -> },
         )
     }
 }
@@ -66,7 +67,7 @@ private fun CategoriesScreenPreviewDark() {
     RecipesAppTheme(darkTheme = true) {
         CategoriesScreen(
             modifier = Modifier.fillMaxSize(),
-            onCategoryClick = {},
+            onCategoryClick = { _, _ -> },
         )
     }
 }

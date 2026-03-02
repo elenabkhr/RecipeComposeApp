@@ -25,7 +25,7 @@ import com.yourcompany.recipecomposeapp.ui.theme.recipesAppTypography
 @Composable
 fun CategoryItem(
     category: CategoryUiModel,
-    onClick: (Int) -> Unit,
+    onClick: (Int, String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -36,7 +36,7 @@ fun CategoryItem(
         elevation = CardDefaults.cardElevation(2.dp),
         colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surface),
 
-        onClick = { onClick((category.id)) },
+        onClick = { onClick(category.id, category.title) },
     ) {
         Column(modifier.fillMaxSize()) {
 
@@ -79,7 +79,7 @@ private fun CategoryScreenPreviewLight() {
                 description = "",
                 imageUrl = ""
             ),
-            onClick = {}
+            onClick = { _, _ -> }
         )
     }
 }
@@ -95,7 +95,7 @@ private fun CategoryScreenPreviewDark() {
                 description = "",
                 imageUrl = ""
             ),
-            onClick = {}
+            onClick = { _, _ -> }
         )
     }
 }

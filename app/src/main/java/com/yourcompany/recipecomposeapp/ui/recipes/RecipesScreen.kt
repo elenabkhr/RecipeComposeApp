@@ -15,6 +15,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.lazy.items
+import androidx.compose.runtime.key
+import androidx.compose.ui.res.painterResource
+import com.yourcompany.recipecomposeapp.R
 import com.yourcompany.recipecomposeapp.core.ui.ScreenHeader
 import com.yourcompany.recipecomposeapp.data.repository.RecipeRepositoryStub
 import com.yourcompany.recipecomposeapp.ui.recipes.model.RecipeUiModel
@@ -38,7 +41,7 @@ fun RecipesScreen(
     Column(modifier = modifier) {
         ScreenHeader(
             text = categoryTitle,
-            image = ,
+            painter = painterResource(id = R.drawable.bcg_categories)
         )
         LazyColumn(
             modifier = Modifier.fillMaxSize(),

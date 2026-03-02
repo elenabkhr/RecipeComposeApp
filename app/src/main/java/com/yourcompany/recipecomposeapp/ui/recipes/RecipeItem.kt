@@ -1,4 +1,4 @@
-package com.yourcompany.recipecomposeapp.ui.categories
+package com.yourcompany.recipecomposeapp.ui.recipes
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,51 +18,42 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.yourcompany.recipecomposeapp.R
-import com.yourcompany.recipecomposeapp.ui.categories.model.CategoryUiModel
+import com.yourcompany.recipecomposeapp.ui.recipes.model.RecipeUiModel
 import com.yourcompany.recipecomposeapp.ui.theme.RecipesAppTheme
 import com.yourcompany.recipecomposeapp.ui.theme.recipesAppTypography
 
 @Composable
-fun CategoryItem(
-    category: CategoryUiModel,
-    onClick: (Int, String) -> Unit,
-    modifier: Modifier = Modifier
+fun RecipeItem(
+    recipe: RecipeUiModel,
+    onClick: (Int) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .height(220.dp),
+            .height(132.dp),
         shape = RoundedCornerShape(8.dp),
         elevation = CardDefaults.cardElevation(2.dp),
         colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surface),
-
-        onClick = { onClick(category.id, category.title) },
+        onClick = { onClick(recipe.id) }
     ) {
         Column(modifier.fillMaxSize()) {
-
             AsyncImage(
-                model = category.imageUrl,
+                model = recipe.imageUrl,
                 contentDescription = null,
                 placeholder = painterResource(id = R.drawable.bcg_placeholder),
                 error = painterResource(id = R.drawable.bcg_error),
                 modifier = modifier
                     .fillMaxWidth()
-                    .height(130.dp),
+                    .height(100.dp),
                 contentScale = ContentScale.Crop
             )
 
             Text(
-                text = category.title.uppercase(),
-                modifier = modifier.padding(start = 8.dp, top = 8.dp),
+                text = recipe.title.uppercase(),
+                modifier = modifier.padding(top = 8.dp, start = 8.dp, bottom = 8.dp),
                 style = recipesAppTypography.titleMedium,
-                color = MaterialTheme.colorScheme.primary,
-            )
-
-            Text(
-                text = category.description,
-                modifier = modifier.padding(8.dp),
-                style = recipesAppTypography.bodySmall,
-                color = MaterialTheme.colorScheme.onSecondary,
+                color = MaterialTheme.colorScheme.primary
             )
         }
     }
@@ -70,32 +61,39 @@ fun CategoryItem(
 
 @Preview(showBackground = true)
 @Composable
-private fun CategoryScreenPreviewLight() {
+private fun RecipesItemPreviewLight() {
     RecipesAppTheme(darkTheme = false) {
-        CategoryItem(
-            category = CategoryUiModel(
+        RecipeItem(
+            recipe = RecipeUiModel(
                 id = 1,
                 title = "",
-                description = "",
-                imageUrl = ""
+                ingredients = listOf(),
+                method = listOf(),
+                imageUrl = "",
+                isFavorite = false
             ),
-            onClick = { _, _ -> }
+            onClick = {},
+            Modifier
         )
     }
 }
 
+
 @Preview(showBackground = true)
 @Composable
-private fun CategoryScreenPreviewDark() {
+private fun RecipesItemPreviewDark() {
     RecipesAppTheme(darkTheme = true) {
-        CategoryItem(
-            category = CategoryUiModel(
+        RecipeItem(
+            recipe = RecipeUiModel(
                 id = 1,
                 title = "",
-                description = "",
-                imageUrl = ""
+                ingredients = listOf(),
+                method = listOf(),
+                imageUrl = "",
+                isFavorite = false
             ),
-            onClick = { _, _ -> }
+            onClick = {},
+            Modifier
         )
     }
 }

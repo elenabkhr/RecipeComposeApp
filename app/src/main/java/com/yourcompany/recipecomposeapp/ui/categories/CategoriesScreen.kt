@@ -20,8 +20,10 @@ import com.yourcompany.recipecomposeapp.data.repository.RecipeRepositoryStub
 import com.yourcompany.recipecomposeapp.ui.categories.model.toUiModel
 
 @Composable
-fun CategoriesScreen(modifier: Modifier = Modifier) {
-
+fun CategoriesScreen(
+    modifier: Modifier = Modifier,
+    onCategoryClick: (Int, String) -> Unit,
+) {
     val categories = RecipeRepositoryStub
         .getCategories()
         .map { it.toUiModel() }
@@ -36,13 +38,12 @@ fun CategoriesScreen(modifier: Modifier = Modifier) {
             contentPadding = PaddingValues(top = 16.dp, start = 16.dp, end = 16.dp, bottom = 8.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp),
+            modifier = Modifier.fillMaxSize()
         ) {
             items(categories) { category ->
                 CategoryItem(
-                    title = category.title,
-                    description = category.description,
-                    urlImage = category.imageUrl,
-                    onClick = {},
+                    category = category,
+                    onClick = onCategoryClick,
                 )
             }
         }
@@ -54,7 +55,8 @@ fun CategoriesScreen(modifier: Modifier = Modifier) {
 private fun CategoriesScreenPreviewLight() {
     RecipesAppTheme(darkTheme = false) {
         CategoriesScreen(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize(),
+            onCategoryClick = { _, _ -> },
         )
     }
 }
@@ -64,7 +66,8 @@ private fun CategoriesScreenPreviewLight() {
 private fun CategoriesScreenPreviewDark() {
     RecipesAppTheme(darkTheme = true) {
         CategoriesScreen(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize(),
+            onCategoryClick = { _, _ -> },
         )
     }
 }

@@ -35,8 +35,8 @@ fun ScreenHeader(
         Image(
             painter = painter,
             contentDescription = null,
+            contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Crop
         )
 
         Surface(
@@ -63,6 +63,8 @@ fun ScreenHeader(
 @Composable
 private fun ScreenHeaderPreview() {
     RecipesAppTheme {
-        ScreenHeader(text = "")
+        ScreenHeader(
+            text = ""
+        )
     }
 }

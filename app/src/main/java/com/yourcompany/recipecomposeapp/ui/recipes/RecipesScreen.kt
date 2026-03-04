@@ -15,7 +15,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.lazy.items
-import androidx.compose.runtime.key
 import androidx.compose.ui.res.painterResource
 import com.yourcompany.recipecomposeapp.R
 import com.yourcompany.recipecomposeapp.core.ui.ScreenHeader
@@ -44,14 +43,14 @@ fun RecipesScreen(
             painter = painterResource(id = R.drawable.bcg_categories)
         )
         LazyColumn(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = 16.dp, start = 16.dp, end = 16.dp, bottom = 8.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             items(recipes, key = { it.id }) { recipe ->
                 RecipeItem(
                     recipe = recipe,
-                    modifier = modifier
-                        .padding(top = 16.dp, start = 16.dp, end = 16.dp, bottom = 8.dp),
                     onClick = {}
                 )
             }

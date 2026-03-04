@@ -37,13 +37,13 @@ fun RecipeItem(
         colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surface),
         onClick = { onClick(recipe.id) }
     ) {
-        Column(modifier.fillMaxSize()) {
+        Column(Modifier.fillMaxSize()) {
             AsyncImage(
                 model = recipe.imageUrl,
                 contentDescription = null,
                 placeholder = painterResource(id = R.drawable.bcg_placeholder),
                 error = painterResource(id = R.drawable.bcg_error),
-                modifier = modifier
+                modifier = Modifier
                     .fillMaxWidth()
                     .height(100.dp),
                 contentScale = ContentScale.Crop
@@ -51,7 +51,7 @@ fun RecipeItem(
 
             Text(
                 text = recipe.title.uppercase(),
-                modifier = modifier.padding(top = 8.dp, start = 8.dp, bottom = 8.dp),
+                modifier = Modifier.padding(top = 8.dp, start = 8.dp, bottom = 8.dp),
                 style = recipesAppTypography.titleMedium,
                 color = MaterialTheme.colorScheme.primary
             )

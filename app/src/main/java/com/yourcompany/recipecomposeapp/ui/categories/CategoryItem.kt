@@ -38,14 +38,14 @@ fun CategoryItem(
 
         onClick = { onClick(category.id, category.title) },
     ) {
-        Column(modifier.fillMaxSize()) {
+        Column(Modifier.fillMaxSize()) {
 
             AsyncImage(
                 model = category.imageUrl,
                 contentDescription = null,
                 placeholder = painterResource(id = R.drawable.bcg_placeholder),
                 error = painterResource(id = R.drawable.bcg_error),
-                modifier = modifier
+                modifier = Modifier
                     .fillMaxWidth()
                     .height(130.dp),
                 contentScale = ContentScale.Crop
@@ -53,14 +53,14 @@ fun CategoryItem(
 
             Text(
                 text = category.title.uppercase(),
-                modifier = modifier.padding(start = 8.dp, top = 8.dp),
+                modifier = Modifier.padding(start = 8.dp, top = 8.dp),
                 style = recipesAppTypography.titleMedium,
                 color = MaterialTheme.colorScheme.primary,
             )
 
             Text(
                 text = category.description,
-                modifier = modifier.padding(8.dp),
+                modifier = Modifier.padding(8.dp),
                 style = recipesAppTypography.bodySmall,
                 color = MaterialTheme.colorScheme.onSecondary,
             )

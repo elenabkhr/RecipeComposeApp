@@ -25,6 +25,7 @@ import com.yourcompany.recipecomposeapp.ui.theme.RecipesAppTheme
 
 @Composable
 fun RecipesScreen(
+    onRecipeClick: (Int) -> Unit,
     categoryId: Int,
     categoryTitle: String,
     modifier: Modifier = Modifier
@@ -51,7 +52,7 @@ fun RecipesScreen(
             items(recipes, key = { it.id }) { recipe ->
                 RecipeItem(
                     recipe = recipe,
-                    onClick = {}
+                    onClick = onRecipeClick
                 )
             }
         }
@@ -63,6 +64,7 @@ fun RecipesScreen(
 private fun RecipesScreenPreviewLight() {
     RecipesAppTheme(darkTheme = false) {
         RecipesScreen(
+            onRecipeClick = {},
             categoryId = 0,
             categoryTitle = "",
             modifier = Modifier.fillMaxSize(),
@@ -75,6 +77,7 @@ private fun RecipesScreenPreviewLight() {
 private fun RecipesScreenPreviewDark() {
     RecipesAppTheme(darkTheme = true) {
         RecipesScreen(
+            onRecipeClick = {},
             categoryId = 0,
             categoryTitle = "",
             modifier = Modifier.fillMaxSize(),

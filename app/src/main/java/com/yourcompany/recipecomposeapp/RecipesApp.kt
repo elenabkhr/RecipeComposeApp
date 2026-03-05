@@ -31,9 +31,6 @@ fun RecipesApp() {
                     onFavoritesClick = {
                         currentScreen = ScreenId.FAVORITES
                     },
-                    onRecipesClick = {
-                        currentScreen = ScreenId.RECIPES
-                    }
                 )
             },
             modifier = Modifier.fillMaxSize(),
@@ -58,6 +55,7 @@ fun RecipesApp() {
 
                 ScreenId.RECIPES ->
                     RecipesScreen(
+                        onRecipeClick = {},
                         categoryId = selectedCategoryId ?: error("Category ID is required"),
                         categoryTitle = selectedCategoryTitle
                             ?: error("Category title is required"),

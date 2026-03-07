@@ -28,7 +28,6 @@ import com.yourcompany.recipecomposeapp.ui.theme.recipesAppTypography
 fun BottomNavigation(
     onCategoriesClick: () -> Unit,
     onFavoritesClick: () -> Unit,
-    onRecipesClick: () -> Unit
 ) {
     Row(
         modifier = Modifier
@@ -42,7 +41,6 @@ fun BottomNavigation(
         Spacer(modifier = Modifier.width(4.dp))
 
         FavoritesButton(onClick = onFavoritesClick, Modifier.weight(1f))
-        RecipesButton(onClick = onRecipesClick, Modifier.weight(1f))
     }
 }
 
@@ -90,30 +88,12 @@ fun FavoritesButton(onClick: () -> Unit, modifier: Modifier) {
 }
 
 @Composable
-fun RecipesButton(onClick: () -> Unit, modifier: Modifier) {
-    Button(
-        onClick = onClick,
-        colors = ButtonDefaults.buttonColors(
-            MaterialTheme.colorScheme.tertiary
-        ),
-        shape = RoundedCornerShape(8.dp),
-        modifier = modifier,
-    ) {
-        Text(
-            text = "рецепты тест".uppercase(),
-            style = recipesAppTypography.titleMedium,
-        )
-    }
-}
-
-@Composable
 @Preview(showBackground = true)
 fun BottomNavigationPreviewLight() {
     RecipesAppTheme(darkTheme = false) {
         BottomNavigation(
             onCategoriesClick = {},
             onFavoritesClick = {},
-            onRecipesClick = {},
         )
     }
 }
@@ -125,7 +105,6 @@ fun BottomNavigationPreviewDark() {
         BottomNavigation(
             onCategoriesClick = {},
             onFavoritesClick = {},
-            onRecipesClick = {}
         )
     }
 }

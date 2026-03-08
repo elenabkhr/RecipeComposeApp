@@ -15,6 +15,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.ui.res.painterResource
 import com.yourcompany.recipecomposeapp.R
 import com.yourcompany.recipecomposeapp.core.ui.ScreenHeader
@@ -31,11 +32,17 @@ fun RecipesScreen(
     modifier: Modifier = Modifier
 ) {
     var recipes by remember { mutableStateOf<List<RecipeUiModel>>(emptyList()) }
+    var isLoading by remember { mutableStateOf(false) }
 
     LaunchedEffect(categoryId) {
-        recipes = RecipeRepositoryStub
-            .getRecipesByCategoryId(categoryId)
-            .map { dto -> dto.toUiModel() }
+        isLoading = true
+        try {
+            recipes = RecipeRepositoryStub
+                .getRecipesByCategoryId(categoryId)
+                .map { dto -> dto.toUiModel() }
+        } finally {
+            isLoading = false
+        }
     }
 
     Column(modifier = modifier) {
@@ -43,17 +50,20 @@ fun RecipesScreen(
             text = categoryTitle,
             painter = painterResource(id = R.drawable.bcg_categories)
         )
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(top = 16.dp, start = 16.dp, end = 16.dp, bottom = 8.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            items(recipes, key = { it.id }) { recipe ->
-                RecipeItem(
-                    recipe = recipe,
-                    onClick = onRecipeClick
-                )
+        if (isLoading) CircularProgressIndicator()
+        else {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = 16.dp, start = 16.dp, end = 16.dp, bottom = 8.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                items(recipes, key = { it.id }) { recipe ->
+                    RecipeItem(
+                        recipe = recipe,
+                        onClick = onRecipeClick
+                    )
+                }
             }
         }
     }

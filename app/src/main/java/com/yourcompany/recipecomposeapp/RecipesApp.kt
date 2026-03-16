@@ -9,11 +9,14 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.yourcompany.recipecomposeapp.data.KEY_RECIPE_OBJECT
 import com.yourcompany.recipecomposeapp.ui.categories.CategoriesScreen
+import com.yourcompany.recipecomposeapp.ui.details.RecipeDetailsScreen
 import com.yourcompany.recipecomposeapp.ui.favorites.FavoritesScreen
 import com.yourcompany.recipecomposeapp.ui.navigation.BottomNavigation
 import com.yourcompany.recipecomposeapp.ui.navigation.Destination
 import com.yourcompany.recipecomposeapp.ui.recipes.RecipesScreen
+import com.yourcompany.recipecomposeapp.ui.recipes.model.RecipeUiModel
 import com.yourcompany.recipecomposeapp.ui.theme.RecipesAppTheme
 
 @Composable
@@ -67,7 +70,22 @@ fun RecipesApp() {
                     RecipesScreen(
                         categoryId = categoryId,
                         categoryTitle = categoryTitle,
-                        onRecipeClick = {},
+                        onRecipeClick = { recipeId, recipe ->
+                            navController.currentBackStackEntry?.savedStateHandle?.set(
+                                KEY_RECIPE_OBJECT, recipe
+                            )
+                            navController.navigate(Destination.RecipeDetails.createRoute(recipeId))
+                        },
+                    )
+                }
+
+                composable(route = Destination.RecipeDetails.route) {
+                    val recipe =
+                        navController.previousBackStackEntry?.savedStateHandle?.get<RecipeUiModel>(
+                            KEY_RECIPE_OBJECT
+                        )
+                    RecipeDetailsScreen(
+                        recipe = recipe ?: error("RecipeUiModel is required")
                     )
                 }
             }

@@ -161,4 +161,9 @@ object RecipeRepositoryStub {
             else -> emptyList()
         }
     }
+
+    fun getRecipeByRecipeId(recipeId: Int): RecipeDto {
+        return burgerRecipes.find { it.id == recipeId }
+            ?: throw NoSuchElementException("Recipe with $recipeId not found")
+    }
 }

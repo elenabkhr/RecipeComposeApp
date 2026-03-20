@@ -1,12 +1,10 @@
 package com.yourcompany.recipecomposeapp.ui.recipes.model
 
-import android.os.Parcelable
 import androidx.compose.runtime.Immutable
 import com.yourcompany.recipecomposeapp.data.ASSETS_URI_PREFIX
 import com.yourcompany.recipecomposeapp.data.model.RecipeDto
-import kotlinx.parcelize.Parcelize
+import kotlin.Int
 
-@Parcelize
 @Immutable
 data class RecipeUiModel(
     val id: Int,
@@ -15,7 +13,8 @@ data class RecipeUiModel(
     val method: List<String>,
     val imageUrl: String,
     val isFavorite: Boolean,
-) : Parcelable
+    val servings: Int = 1,
+)
 
 fun RecipeDto.toUiModel() = RecipeUiModel(
     id = id,

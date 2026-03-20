@@ -1,18 +1,17 @@
 package com.yourcompany.recipecomposeapp.ui.recipes.model
 
-import android.os.Parcelable
 import androidx.compose.runtime.Immutable
 import com.yourcompany.recipecomposeapp.data.model.IngredientDto
-import kotlinx.parcelize.Parcelize
 
-@Parcelize
 @Immutable
 data class IngredientUiModel(
     val name: String,
-    val amount: String,
-) : Parcelable
+    val quantity: Double,
+    val unit: String
+)
 
 fun IngredientDto.toUiModel() = IngredientUiModel(
     name = description,
-    amount = "$quantity $unitOfMeasure"
+    quantity = quantity.toDoubleOrNull() ?: 0.0,
+    unit = unitOfMeasure
 )

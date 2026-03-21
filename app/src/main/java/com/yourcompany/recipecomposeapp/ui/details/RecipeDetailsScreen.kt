@@ -16,25 +16,26 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.yourcompany.recipecomposeapp.R
 import com.yourcompany.recipecomposeapp.core.ui.ScreenHeader
-import com.yourcompany.recipecomposeapp.data.repository.RecipeRepositoryStub
+import com.yourcompany.recipecomposeapp.data.model.RecipeDto
 import com.yourcompany.recipecomposeapp.ui.recipes.model.IngredientUiModel
 import com.yourcompany.recipecomposeapp.ui.recipes.model.toUiModel
 import com.yourcompany.recipecomposeapp.ui.theme.recipesAppTypography
+import com.yourcompany.recipecomposeapp.utils.shareRecipe
 import kotlin.collections.map
 
 @Composable
 fun RecipeDetailsScreen(
-    recipeId: Int,
+    recipe: RecipeDto,
     modifier: Modifier = Modifier
 ) {
-    val recipe = RecipeRepositoryStub
-        .getRecipeByRecipeId(recipeId)
-        .toUiModel()
+    val recipe = recipe.toUiModel()
+    val context = LocalContext.current
 
     var currentPortions by remember { mutableStateOf(recipe.servings) }
 
@@ -52,7 +53,9 @@ fun RecipeDetailsScreen(
     ) {
         ScreenHeader(
             text = recipe.title,
-            painter = painterResource(id = R.drawable.bcg_categories)
+            painter = painterResource(id = R.drawable.bcg_categories),
+            showShareButton = true,
+            onShareClick = { shareRecipe(context, recipe.id, recipe.title) }
         )
 
         PortionsSelector(currentPortions) { newValue -> currentPortions = newValue }
@@ -103,7 +106,7 @@ fun MethodsList(method: List<String>) {
         Column(modifier = Modifier.padding(vertical = 12.dp)) {
 
             method.forEachIndexed { index, item ->
-                MethodItem(item)
+                MethodItem(index, item)
 
                 if (index < method.lastIndex) {
                     HorizontalDivider(

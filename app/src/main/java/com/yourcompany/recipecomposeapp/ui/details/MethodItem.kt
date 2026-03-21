@@ -15,6 +15,7 @@ import com.yourcompany.recipecomposeapp.ui.theme.recipesAppTypography
 
 @Composable
 fun MethodItem(
+    index: Int,
     method: String,
     modifier: Modifier = Modifier
 ) {
@@ -24,7 +25,7 @@ fun MethodItem(
             .padding(horizontal = 12.dp),
     ) {
         Text(
-            text = method,
+            text = "${index + 1}. $method",
             color = MaterialTheme.colorScheme.onSecondary,
             style = recipesAppTypography.bodyMedium.copy(
                 fontWeight = FontWeight.Normal
@@ -38,6 +39,7 @@ fun MethodItem(
 fun MethodItemPreviewLight() {
     RecipesAppTheme(darkTheme = false) {
         MethodItem(
+            index = 1,
             method = "Method",
         )
     }
@@ -48,6 +50,7 @@ fun MethodItemPreviewLight() {
 fun MethodItemPreviewDark() {
     RecipesAppTheme(darkTheme = true) {
         MethodItem(
+            index = 1,
             method = "Method",
         )
     }

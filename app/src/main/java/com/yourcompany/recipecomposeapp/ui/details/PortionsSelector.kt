@@ -41,7 +41,7 @@ fun PortionsSelector(
         modifier = Modifier.padding(horizontal = 16.dp)
     ) {
         Text(
-            text = stringResource(id = R.string.favorites_header).uppercase(),
+            text = stringResource(id = R.string.ingredients_title).uppercase(),
             style = recipesAppTypography.displayLarge,
             color = MaterialTheme.colorScheme.primary
         )

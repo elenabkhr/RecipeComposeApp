@@ -4,6 +4,7 @@
     <string name="favorites_header">Избранное</string>
     <string name="recipes_header">Рецепты</string>
     <string name="cooking_method">Способ приготовления </string>
+    <string name="ingredients_title">Ингредиенты</string>
 
     <plurals name="portions_count">
         <item quantity="one">Порция: %d</item>

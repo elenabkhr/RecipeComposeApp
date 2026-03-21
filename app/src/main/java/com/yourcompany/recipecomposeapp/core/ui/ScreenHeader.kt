@@ -25,7 +25,9 @@ import com.yourcompany.recipecomposeapp.ui.theme.recipesAppTypography
 @Composable
 fun ScreenHeader(
     text: String,
-    painter: Painter = painterResource(id = R.drawable.bcg_placeholder)
+    painter: Painter = painterResource(id = R.drawable.bcg_placeholder),
+    showShareButton: Boolean = false,
+    onShareClick: () -> Unit = {}
 ) {
     Box(
         modifier = Modifier

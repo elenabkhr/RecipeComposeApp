@@ -37,7 +37,9 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:scheme="https" />
+                <data
+                    android:host="recipes.androidsprint.ru"
+                    android:scheme="https" />
             </intent-filter>
 
         </activity>

@@ -5,6 +5,7 @@
     <string name="recipes_header">Рецепты</string>
     <string name="cooking_method">Способ приготовления </string>
     <string name="ingredients_title">Ингредиенты</string>
+    <string name="icon_share">Поделиться</string>
 
     <plurals name="portions_count">
         <item quantity="one">Порция: %d</item>

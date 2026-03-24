@@ -6,7 +6,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -16,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.yourcompany.recipecomposeapp.R
@@ -25,7 +29,9 @@ import com.yourcompany.recipecomposeapp.ui.theme.recipesAppTypography
 @Composable
 fun ScreenHeader(
     text: String,
-    painter: Painter = painterResource(id = R.drawable.bcg_placeholder)
+    painter: Painter = painterResource(id = R.drawable.bcg_placeholder),
+    showShareButton: Boolean = false,
+    onShareClick: () -> Unit = {}
 ) {
     Box(
         modifier = Modifier
@@ -38,6 +44,25 @@ fun ScreenHeader(
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize(),
         )
+
+        if (showShareButton) {
+            Surface(
+                modifier = Modifier
+                    .align(Alignment.TopStart)
+                    .padding(16.dp),
+                shape = RoundedCornerShape(8.dp),
+                color = MaterialTheme.colorScheme.background,
+            ) {
+                IconButton(onClick = onShareClick) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_share),
+                        contentDescription = stringResource(id = R.string.icon_share),
+                        tint = MaterialTheme.colorScheme.onSurface,
+                        modifier = Modifier.size(30.dp),
+                    )
+                }
+            }
+        }
 
         Surface(
             modifier = Modifier

@@ -48,7 +48,7 @@ fun RecipesScreen(
     Column(modifier = modifier) {
         ScreenHeader(
             text = categoryTitle,
-            painter = painterResource(id = R.drawable.bcg_categories)
+            painter = painterResource(id = R.drawable.bcg_categories),
         )
         if (isLoading) CircularProgressIndicator()
         else {

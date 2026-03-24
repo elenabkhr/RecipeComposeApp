@@ -30,7 +30,7 @@ fun CategoriesScreen(
 
     Column(modifier = modifier) {
         ScreenHeader(
-            text = stringResource(id = R.string.categories_header),
+            text = stringResource(id = R.string.categories),
             painter = painterResource(id = R.drawable.bcg_categories),
         )
         LazyVerticalGrid(

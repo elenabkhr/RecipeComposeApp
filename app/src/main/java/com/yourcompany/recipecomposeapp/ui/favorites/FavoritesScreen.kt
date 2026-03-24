@@ -15,7 +15,7 @@ import com.yourcompany.recipecomposeapp.ui.theme.RecipesAppTheme
 fun FavoritesScreen(modifier: Modifier = Modifier) {
     Column(modifier = modifier) {
         ScreenHeader(
-            text = stringResource(id = R.string.favorites_header),
+            text = stringResource(id = R.string.favorites),
             painter = painterResource(id = R.drawable.bcg_favorites),
         )
         FavoritesItem()

@@ -11,9 +11,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -37,9 +39,10 @@ fun RecipeDetailsScreen(
     val recipe = recipe.toUiModel()
     val context = LocalContext.current
 
-    var currentPortions by remember { mutableStateOf(recipe.servings) }
+    var currentPortions by rememberSaveable { mutableIntStateOf(recipe.servings) }
+    var isFavorite by rememberSaveable { mutableStateOf(false) }
 
-    val scaledIngredients = remember(currentPortions) {
+    val scaledIngredients = remember(recipe.ingredients, currentPortions) {
         val multiplier = currentPortions.toDouble() / recipe.servings
 
         recipe.ingredients.map { ingredient ->
@@ -55,7 +58,10 @@ fun RecipeDetailsScreen(
             text = recipe.title,
             painter = painterResource(id = R.drawable.bcg_categories),
             showShareButton = true,
-            onShareClick = { shareRecipe(context, recipe.id, recipe.title) }
+            onShareClick = { shareRecipe(context, recipe.id, recipe.title) },
+            showFavoriteButton = true,
+            isFavorite = isFavorite,
+            onFavoriteToggle = { isFavorite = !isFavorite },
         )
 
         PortionsSelector(currentPortions) { newValue -> currentPortions = newValue }

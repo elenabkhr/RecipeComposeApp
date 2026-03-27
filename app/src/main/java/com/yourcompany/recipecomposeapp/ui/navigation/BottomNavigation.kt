@@ -55,7 +55,7 @@ fun CategoriesButton(onClick: () -> Unit, modifier: Modifier) {
         modifier = modifier,
     ) {
         Text(
-            text = stringResource(id = R.string.categories_header).uppercase(),
+            text = stringResource(id = R.string.categories).uppercase(),
             style = recipesAppTypography.titleMedium,
         )
     }
@@ -72,7 +72,7 @@ fun FavoritesButton(onClick: () -> Unit, modifier: Modifier) {
         modifier = modifier,
     ) {
         Text(
-            text = stringResource(id = R.string.favorites_header).uppercase(),
+            text = stringResource(id = R.string.favorites).uppercase(),
             style = recipesAppTypography.titleMedium,
         )
 

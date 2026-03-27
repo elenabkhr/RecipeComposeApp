@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">RecipeComposeApp</string>
-    <string name="categories_header">Категории</string>
-    <string name="favorites_header">Избранное</string>
-    <string name="recipes_header">Рецепты</string>
+    <string name="categories">Категории</string>
+    <string name="favorites">Избранное</string>
+    <string name="recipes">Рецепты</string>
     <string name="cooking_method">Способ приготовления </string>
     <string name="ingredients_title">Ингредиенты</string>
     <string name="icon_share">Поделиться</string>

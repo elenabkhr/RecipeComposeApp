@@ -4,7 +4,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavType
 import androidx.navigation.compose.rememberNavController
@@ -20,6 +25,7 @@ import com.yourcompany.recipecomposeapp.ui.navigation.BottomNavigation
 import com.yourcompany.recipecomposeapp.ui.navigation.Destination
 import com.yourcompany.recipecomposeapp.ui.recipes.RecipesScreen
 import com.yourcompany.recipecomposeapp.ui.theme.RecipesAppTheme
+import com.yourcompany.recipecomposeapp.utils.FavoritesPrefsManager
 import kotlinx.coroutines.delay
 
 @Composable
@@ -103,10 +109,29 @@ fun RecipesApp(deepLinkIntent: Intent?) {
                     arguments = listOf(navArgument("id") { type = NavType.IntType })
                 ) { backStackEntry ->
                     val recipeId = backStackEntry.arguments?.getInt("id") ?: 0
-
                     val recipe = getRecipeById(recipeId)
 
-                    recipe?.let { RecipeDetailsScreen(recipe = it) }
+                    val context = LocalContext.current
+                    val prefs = remember { FavoritesPrefsManager(context) }
+
+                    var isFavorite by remember(recipeId) {
+                        mutableStateOf(prefs.isFavorite(recipeId))
+                    }
+
+                    recipe?.let {
+                        RecipeDetailsScreen(
+                            recipe = it,
+                            isFavorite = isFavorite,
+                            onFavoriteToggle = {
+                                if (isFavorite) {
+                                    prefs.removeFromFavorites(recipeId)
+                                } else {
+                                    prefs.addToFavorites(recipeId)
+                                }
+                                isFavorite = !isFavorite
+                            }
+                        )
+                    }
                 }
             }
         }

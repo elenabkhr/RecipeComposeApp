@@ -6,7 +6,7 @@ import com.yourcompany.recipecomposeapp.data.KEY_FAVORITES
 import com.yourcompany.recipecomposeapp.data.KEY_PREFS
 
 class FavoritesPrefsManager(context: Context) {
-    val sharedPreferences = context.getSharedPreferences(KEY_PREFS, Context.MODE_PRIVATE)
+    private val sharedPreferences = context.getSharedPreferences(KEY_PREFS, Context.MODE_PRIVATE)
 
     fun isFavorite(recipeId: Int): Boolean {
         val favoriteRecipeIds =
@@ -32,9 +32,6 @@ class FavoritesPrefsManager(context: Context) {
         }
     }
 
-    fun getAllFavorites(): Set<String> {
-        val favoriteRecipeId =
-            sharedPreferences.getStringSet(KEY_FAVORITES, emptySet()) ?: emptySet<String>()
-        return favoriteRecipeId
-    }
+    fun getAllFavorites(): Set<String> =
+        sharedPreferences.getStringSet(KEY_FAVORITES, emptySet()) ?: emptySet<String>()
 }

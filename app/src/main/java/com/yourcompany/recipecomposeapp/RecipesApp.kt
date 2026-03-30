@@ -4,11 +4,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
@@ -113,14 +112,12 @@ fun RecipesApp(deepLinkIntent: Intent?) {
                     val recipe = getRecipeById(recipeId)
 
                     val context = LocalContext.current
-                    val dataStore = remember { FavoriteDataStoreManager(context) }
+                    val favoriteDataStoreManager = remember { FavoriteDataStoreManager(context) }
 
                     val coroutineScope = rememberCoroutineScope()
-                    var isFavorite by remember { mutableStateOf(false) }
-
-                    LaunchedEffect(recipeId) {
-                        isFavorite = dataStore.isFavorite(recipeId)
-                    }
+                    val isFavorite by favoriteDataStoreManager
+                        .isFavoriteFlow(recipeId)
+                        .collectAsState(initial = false)
 
                     recipe?.let {
                         RecipeDetailsScreen(
@@ -128,10 +125,8 @@ fun RecipesApp(deepLinkIntent: Intent?) {
                             isFavorite = isFavorite,
                             onFavoriteToggle = {
                                 coroutineScope.launch {
-                                    if (isFavorite) dataStore.removeFavorite(recipeId)
-                                    else dataStore.addFavorite(recipeId)
-
-                                    isFavorite = !isFavorite
+                                    if (isFavorite) favoriteDataStoreManager.removeFavorite(recipeId)
+                                    else favoriteDataStoreManager.addFavorite(recipeId)
                                 }
                             }
                         )

@@ -16,11 +16,17 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.yourcompany.recipecomposeapp.data.datastore.FavoriteDataStoreManager
 import com.yourcompany.recipecomposeapp.ui.theme.RecipesAppTheme
 import com.yourcompany.recipecomposeapp.ui.theme.recipesAppTypography
 
@@ -29,6 +35,12 @@ fun BottomNavigation(
     onCategoriesClick: () -> Unit,
     onFavoritesClick: () -> Unit,
 ) {
+    val context = LocalContext.current
+    val favoriteDataStoreManager = remember { FavoriteDataStoreManager(context) }
+    val count by favoriteDataStoreManager
+        .getFavoriteCountFlow()
+        .collectAsState(initial = 0)
+
     Row(
         modifier = Modifier
             .padding(horizontal = 16.dp, vertical = 8.dp)
@@ -41,6 +53,13 @@ fun BottomNavigation(
         Spacer(modifier = Modifier.width(4.dp))
 
         FavoritesButton(onClick = onFavoritesClick, Modifier.weight(1f))
+
+        if (count > 0) {
+            Text(
+                text = count.toString(),
+                modifier = Modifier.weight(1f)
+            )
+        }
     }
 }
 
@@ -82,7 +101,7 @@ fun FavoritesButton(onClick: () -> Unit, modifier: Modifier) {
             painter = painterResource(id = R.drawable.ic_heart_empty),
             contentDescription = "Иконка сердце",
             modifier = Modifier.size(24.dp),
-            tint = androidx.compose.ui.graphics.Color.Unspecified
+            tint = Color.Unspecified
         )
     }
 }

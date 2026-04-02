@@ -162,7 +162,7 @@ object RecipeRepositoryStub {
         }
     }
 
-    fun getRecipeById(recipeId: Int): RecipeDto? {
+    fun getRecipeById(recipeId: Int?): RecipeDto? {
         return burgerRecipes.find { it.id == recipeId }
     }
 }

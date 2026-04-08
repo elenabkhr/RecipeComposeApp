@@ -18,6 +18,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.yourcompany.recipecomposeapp.data.DEEP_LINK_SCHEME
 import com.yourcompany.recipecomposeapp.data.datastore.FavoriteDataStoreManager
+import com.yourcompany.recipecomposeapp.data.repository.RecipeRepositoryStub
 import com.yourcompany.recipecomposeapp.data.repository.RecipeRepositoryStub.getRecipeById
 import com.yourcompany.recipecomposeapp.ui.categories.CategoriesScreen
 import com.yourcompany.recipecomposeapp.ui.details.RecipeDetailsScreen
@@ -32,6 +33,9 @@ import kotlinx.coroutines.launch
 @Composable
 fun RecipesApp(deepLinkIntent: Intent?) {
     val navController = rememberNavController()
+
+    val context = LocalContext.current
+    val favoriteDataStoreManager = remember { FavoriteDataStoreManager(context) }
 
     LaunchedEffect(deepLinkIntent) {
         deepLinkIntent?.data?.let { uri ->
@@ -82,7 +86,13 @@ fun RecipesApp(deepLinkIntent: Intent?) {
                 }
 
                 composable(route = Destination.Favorites.route) {
-                    FavoritesScreen()
+                    FavoritesScreen(
+                        recipesRepository = RecipeRepositoryStub,
+                        favoriteDataStoreManager = favoriteDataStoreManager,
+                        onRecipeClick = { recipeId ->
+                            navController.navigate(Destination.RecipeDetails.createRoute(recipeId))
+                        },
+                    )
                 }
 
                 composable(
@@ -110,9 +120,6 @@ fun RecipesApp(deepLinkIntent: Intent?) {
                 ) { backStackEntry ->
                     val recipeId = backStackEntry.arguments?.getInt("id") ?: 0
                     val recipe = getRecipeById(recipeId)
-
-                    val context = LocalContext.current
-                    val favoriteDataStoreManager = remember { FavoriteDataStoreManager(context) }
 
                     val coroutineScope = rememberCoroutineScope()
                     val isFavorite by favoriteDataStoreManager

@@ -6,6 +6,7 @@
     <string name="cooking_method">Способ приготовления </string>
     <string name="ingredients_title">Ингредиенты</string>
     <string name="icon_share">Поделиться</string>
+    <string name="no_favorite_recipe">Вы еще не добавили ни одного рецепта в избранное</string>
 
     <plurals name="portions_count">
         <item quantity="one">Порция: %d</item>

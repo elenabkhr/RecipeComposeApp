@@ -1,4 +1,4 @@
-package com.yourcompany.recipecomposeapp.ui.recipes.model
+package com.yourcompany.recipecomposeapp.features.details.presentation.model
 
 import androidx.compose.runtime.Immutable
 import com.yourcompany.recipecomposeapp.data.model.IngredientDto

@@ -1,4 +1,4 @@
-package com.yourcompany.recipecomposeapp.ui.recipes
+package com.yourcompany.recipecomposeapp.features.categories.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,42 +18,51 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.yourcompany.recipecomposeapp.R
-import com.yourcompany.recipecomposeapp.ui.recipes.model.RecipeUiModel
+import com.yourcompany.recipecomposeapp.features.categories.presentanion.model.CategoryUiModel
 import com.yourcompany.recipecomposeapp.ui.theme.RecipesAppTheme
 import com.yourcompany.recipecomposeapp.ui.theme.recipesAppTypography
 
 @Composable
-fun RecipeItem(
-    recipe: RecipeUiModel,
-    onClick: (Int) -> Unit,
-    modifier: Modifier = Modifier,
+fun CategoryItem(
+    category: CategoryUiModel,
+    onClick: (Int, String) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .height(132.dp),
+            .height(220.dp),
         shape = RoundedCornerShape(8.dp),
         elevation = CardDefaults.cardElevation(2.dp),
         colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surface),
-        onClick = { onClick(recipe.id) }
+
+        onClick = { onClick(category.id, category.title) },
     ) {
         Column(Modifier.fillMaxSize()) {
+
             AsyncImage(
-                model = recipe.imageUrl,
+                model = category.imageUrl,
                 contentDescription = null,
                 placeholder = painterResource(id = R.drawable.bcg_placeholder),
                 error = painterResource(id = R.drawable.bcg_error),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(100.dp),
+                    .height(130.dp),
                 contentScale = ContentScale.Crop
             )
 
             Text(
-                text = recipe.title.uppercase(),
-                modifier = Modifier.padding(top = 8.dp, start = 8.dp, bottom = 8.dp),
+                text = category.title.uppercase(),
+                modifier = Modifier.padding(start = 8.dp, top = 8.dp),
                 style = recipesAppTypography.titleMedium,
-                color = MaterialTheme.colorScheme.primary
+                color = MaterialTheme.colorScheme.primary,
+            )
+
+            Text(
+                text = category.description,
+                modifier = Modifier.padding(8.dp),
+                style = recipesAppTypography.bodySmall,
+                color = MaterialTheme.colorScheme.onSecondary,
             )
         }
     }
@@ -61,39 +70,32 @@ fun RecipeItem(
 
 @Preview(showBackground = true)
 @Composable
-private fun RecipesItemPreviewLight() {
+private fun CategoryScreenPreviewLight() {
     RecipesAppTheme(darkTheme = false) {
-        RecipeItem(
-            recipe = RecipeUiModel(
+        CategoryItem(
+            category = CategoryUiModel(
                 id = 1,
                 title = "",
-                ingredients = listOf(),
-                method = listOf(),
-                imageUrl = "",
-                isFavorite = false
+                description = "",
+                imageUrl = ""
             ),
-            onClick = {},
-            Modifier
+            onClick = { _, _ -> }
         )
     }
 }
 
-
 @Preview(showBackground = true)
 @Composable
-private fun RecipesItemPreviewDark() {
+private fun CategoryScreenPreviewDark() {
     RecipesAppTheme(darkTheme = true) {
-        RecipeItem(
-            recipe = RecipeUiModel(
+        CategoryItem(
+            category = CategoryUiModel(
                 id = 1,
                 title = "",
-                ingredients = listOf(),
-                method = listOf(),
-                imageUrl = "",
-                isFavorite = false
+                description = "",
+                imageUrl = ""
             ),
-            onClick = {},
-            Modifier
+            onClick = { _, _ -> }
         )
     }
 }

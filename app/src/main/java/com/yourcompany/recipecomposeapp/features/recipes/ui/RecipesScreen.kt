@@ -1,4 +1,4 @@
-package com.yourcompany.recipecomposeapp.ui.recipes
+package com.yourcompany.recipecomposeapp.features.recipes.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -20,8 +20,8 @@ import androidx.compose.ui.res.painterResource
 import com.yourcompany.recipecomposeapp.R
 import com.yourcompany.recipecomposeapp.core.ui.ScreenHeader
 import com.yourcompany.recipecomposeapp.data.repository.RecipeRepositoryStub
-import com.yourcompany.recipecomposeapp.ui.recipes.model.RecipeUiModel
-import com.yourcompany.recipecomposeapp.ui.recipes.model.toUiModel
+import com.yourcompany.recipecomposeapp.features.recipes.presentation.model.RecipeUiModel
+import com.yourcompany.recipecomposeapp.features.recipes.presentation.model.toUiModel
 import com.yourcompany.recipecomposeapp.ui.theme.RecipesAppTheme
 
 @Composable

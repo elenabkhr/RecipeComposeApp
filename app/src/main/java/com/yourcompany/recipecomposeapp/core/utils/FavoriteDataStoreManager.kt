@@ -1,4 +1,4 @@
-package com.yourcompany.recipecomposeapp.data.datastore
+package com.yourcompany.recipecomposeapp.core.utils
 
 import android.content.Context
 import androidx.datastore.preferences.core.edit
@@ -32,12 +32,6 @@ class FavoriteDataStoreManager(private val context: Context) {
     fun isFavoriteFlow(recipeId: Int): Flow<Boolean> {
         return getFavoriteIdsFlow().map { favorites ->
             favorites.contains(recipeId.toString())
-        }
-    }
-
-    fun getFavoriteCountFlow(): Flow<Int> {
-        return getFavoriteIdsFlow().map { favorites ->
-            favorites.size
         }
     }
 }

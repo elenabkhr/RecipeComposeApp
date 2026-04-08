@@ -1,8 +1,10 @@
-package com.yourcompany.recipecomposeapp.ui.recipes.model
+package com.yourcompany.recipecomposeapp.features.recipes.presentation.model
 
 import androidx.compose.runtime.Immutable
 import com.yourcompany.recipecomposeapp.data.ASSETS_URI_PREFIX
 import com.yourcompany.recipecomposeapp.data.model.RecipeDto
+import com.yourcompany.recipecomposeapp.features.details.presentation.model.IngredientUiModel
+import com.yourcompany.recipecomposeapp.features.details.presentation.model.toUiModel
 import kotlin.Int
 
 @Immutable

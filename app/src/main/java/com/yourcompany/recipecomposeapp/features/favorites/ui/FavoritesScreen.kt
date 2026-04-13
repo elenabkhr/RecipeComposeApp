@@ -1,4 +1,4 @@
-package com.yourcompany.recipecomposeapp.ui.favorites
+package com.yourcompany.recipecomposeapp.features.favorites.ui
 
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
@@ -13,6 +13,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -23,10 +24,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.yourcompany.recipecomposeapp.R
 import com.yourcompany.recipecomposeapp.core.ui.ScreenHeader
-import com.yourcompany.recipecomposeapp.data.datastore.FavoriteDataStoreManager
+import com.yourcompany.recipecomposeapp.core.utils.FavoriteDataStoreManager
 import com.yourcompany.recipecomposeapp.data.repository.RecipeRepositoryStub
-import com.yourcompany.recipecomposeapp.ui.recipes.RecipeItem
-import com.yourcompany.recipecomposeapp.ui.recipes.model.toUiModel
+import com.yourcompany.recipecomposeapp.features.recipes.ui.RecipeItem
+import com.yourcompany.recipecomposeapp.features.recipes.presentation.model.toUiModel
 import com.yourcompany.recipecomposeapp.ui.theme.RecipesAppTheme
 import com.yourcompany.recipecomposeapp.ui.theme.recipesAppTypography
 import kotlinx.coroutines.flow.map
@@ -38,18 +39,22 @@ fun FavoritesScreen(
     onRecipeClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val recipeFavorites by favoriteDataStoreManager
-        .getFavoriteIdsFlow().map { ids ->
-            ids.mapNotNull {
-                try {
-                    recipesRepository.getRecipeById(it.toIntOrNull())
-                } catch (e: NumberFormatException) {
-                    Log.e("FavoritesScreen", "Failed to get recipes by ids", e)
-                    null
+    val favoritesFlow = remember {
+        favoriteDataStoreManager
+            .getFavoriteIdsFlow()
+            .map { ids ->
+                ids.mapNotNull {
+                    try {
+                        recipesRepository.getRecipeById(it.toIntOrNull())
+                    } catch (e: NumberFormatException) {
+                        Log.e("FavoritesScreen", "Failed to get recipes by ids", e)
+                        null
+                    }
                 }
             }
-        }
-        .collectAsState(initial = emptyList())
+    }
+
+    val recipeFavorites by favoritesFlow.collectAsState(initial = emptyList())
 
     val recipes = recipeFavorites.map { dto -> dto.toUiModel() }
 

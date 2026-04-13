@@ -1,8 +1,8 @@
-package com.yourcompany.recipecomposeapp.utils
+package com.yourcompany.recipecomposeapp.core.utils
 
 import android.content.Context
 import android.content.Intent
-import com.yourcompany.recipecomposeapp.ui.navigation.Destination
+import com.yourcompany.recipecomposeapp.core.ui.Destination
 
 fun shareRecipe(
     context: Context,

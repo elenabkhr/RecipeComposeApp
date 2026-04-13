@@ -1,4 +1,4 @@
-package com.yourcompany.recipecomposeapp.ui.details
+package com.yourcompany.recipecomposeapp.features.details.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.yourcompany.recipecomposeapp.ui.recipes.model.IngredientUiModel
+import com.yourcompany.recipecomposeapp.features.details.presentation.model.IngredientUiModel
 import com.yourcompany.recipecomposeapp.ui.theme.RecipesAppTheme
 import com.yourcompany.recipecomposeapp.ui.theme.recipesAppTypography
 

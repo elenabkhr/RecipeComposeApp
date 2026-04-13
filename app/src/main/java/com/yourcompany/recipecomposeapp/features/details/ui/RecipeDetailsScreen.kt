@@ -1,4 +1,4 @@
-package com.yourcompany.recipecomposeapp.ui.details
+package com.yourcompany.recipecomposeapp.features.details.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -24,10 +24,10 @@ import androidx.compose.ui.unit.dp
 import com.yourcompany.recipecomposeapp.R
 import com.yourcompany.recipecomposeapp.core.ui.ScreenHeader
 import com.yourcompany.recipecomposeapp.data.model.RecipeDto
-import com.yourcompany.recipecomposeapp.ui.recipes.model.IngredientUiModel
-import com.yourcompany.recipecomposeapp.ui.recipes.model.toUiModel
+import com.yourcompany.recipecomposeapp.features.details.presentation.model.IngredientUiModel
+import com.yourcompany.recipecomposeapp.features.recipes.presentation.model.toUiModel
 import com.yourcompany.recipecomposeapp.ui.theme.recipesAppTypography
-import com.yourcompany.recipecomposeapp.utils.shareRecipe
+import com.yourcompany.recipecomposeapp.core.utils.shareRecipe
 import kotlin.collections.map
 
 @Composable

@@ -1,4 +1,4 @@
-package com.yourcompany.recipecomposeapp.ui.navigation
+package com.yourcompany.recipecomposeapp.core.ui
 
 import com.yourcompany.recipecomposeapp.data.DEEP_LINK_BASE_URL
 

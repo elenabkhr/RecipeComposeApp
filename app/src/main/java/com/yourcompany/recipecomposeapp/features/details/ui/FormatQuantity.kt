@@ -1,4 +1,4 @@
-package com.yourcompany.recipecomposeapp.ui.details
+package com.yourcompany.recipecomposeapp.features.details.ui
 
 fun formatQuantity(quantity: Double): String {
     val quantityInt = quantity.toInt()

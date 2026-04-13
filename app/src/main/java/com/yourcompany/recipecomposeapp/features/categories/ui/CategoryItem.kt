@@ -18,14 +18,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.yourcompany.recipecomposeapp.R
-import com.yourcompany.recipecomposeapp.features.categories.presentanion.model.CategoryUiModel
+import com.yourcompany.recipecomposeapp.features.categories.presentation.model.CategoryUiModel
 import com.yourcompany.recipecomposeapp.ui.theme.RecipesAppTheme
 import com.yourcompany.recipecomposeapp.ui.theme.recipesAppTypography
 
 @Composable
 fun CategoryItem(
     category: CategoryUiModel,
-    onClick: (Int, String) -> Unit,
+    onClick: (Int, String, String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -35,8 +35,7 @@ fun CategoryItem(
         shape = RoundedCornerShape(8.dp),
         elevation = CardDefaults.cardElevation(2.dp),
         colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surface),
-
-        onClick = { onClick(category.id, category.title) },
+        onClick = { onClick(category.id, category.title, category.imageUrl) },
     ) {
         Column(Modifier.fillMaxSize()) {
 
@@ -79,7 +78,7 @@ private fun CategoryScreenPreviewLight() {
                 description = "",
                 imageUrl = ""
             ),
-            onClick = { _, _ -> }
+            onClick = { _, _, _ -> }
         )
     }
 }
@@ -95,7 +94,7 @@ private fun CategoryScreenPreviewDark() {
                 description = "",
                 imageUrl = ""
             ),
-            onClick = { _, _ -> }
+            onClick = { _, _, _ -> }
         )
     }
 }

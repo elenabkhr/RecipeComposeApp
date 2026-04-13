@@ -1,4 +1,4 @@
-package com.yourcompany.recipecomposeapp.features.categories.presentanion.model
+package com.yourcompany.recipecomposeapp.features.categories.presentation.model
 
 import androidx.compose.runtime.Immutable
 import com.yourcompany.recipecomposeapp.data.ASSETS_URI_PREFIX

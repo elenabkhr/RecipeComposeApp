@@ -1,3 +1,5 @@
+package com.yourcompany.recipecomposeapp
+
 import android.content.Intent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -29,6 +31,7 @@ import com.yourcompany.recipecomposeapp.features.recipes.ui.RecipesScreen
 import com.yourcompany.recipecomposeapp.ui.theme.RecipesAppTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.net.URLEncoder
 
 @Composable
 fun RecipesApp(deepLinkIntent: Intent?) {
@@ -77,9 +80,15 @@ fun RecipesApp(deepLinkIntent: Intent?) {
             ) {
                 composable(route = Destination.Categories.route) {
                     CategoriesScreen(
-                        onCategoryClick = { categoryId, categoryTitle ->
+                        onCategoryClick = { categoryId, categoryTitle, categoryImageUrl ->
+                            val encodedImage = URLEncoder.encode(categoryImageUrl, "UTF-8")
+
                             navController.navigate(
-                                Destination.Recipes.createRoute(categoryId, categoryTitle)
+                                Destination.Recipes.createRoute(
+                                    categoryId,
+                                    categoryTitle,
+                                    encodedImage,
+                                )
                             )
                         }
                     )
@@ -99,15 +108,19 @@ fun RecipesApp(deepLinkIntent: Intent?) {
                     route = Destination.Recipes.route,
                     arguments = listOf(
                         navArgument("categoryId") { type = NavType.IntType },
-                        navArgument("categoryTitle") { type = NavType.StringType }),
+                        navArgument("categoryTitle") { type = NavType.StringType },
+                        navArgument("categoryImageUrl") { type = NavType.StringType }),
                 ) { backStackEntry ->
                     val categoryId = backStackEntry.arguments?.getInt("categoryId")
                         ?: error("Category ID is required")
                     val categoryTitle = backStackEntry.arguments?.getString("categoryTitle")
                         ?: error("Category title is required")
+                    val categoryImageUrl = backStackEntry.arguments?.getString("categoryImageUrl")
+                        ?: error("Category image url is required")
                     RecipesScreen(
                         categoryId = categoryId,
                         categoryTitle = categoryTitle,
+                        categoryImageUrl = categoryImageUrl,
                         onRecipeClick = { recipeId ->
                             navController.navigate(Destination.RecipeDetails.createRoute(recipeId))
                         }

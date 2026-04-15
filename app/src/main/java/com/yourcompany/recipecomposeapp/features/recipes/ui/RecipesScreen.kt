@@ -29,6 +29,7 @@ fun RecipesScreen(
     onRecipeClick: (Int) -> Unit,
     categoryId: Int,
     categoryTitle: String,
+    categoryImageUrl: String,
     modifier: Modifier = Modifier
 ) {
     var recipes by remember { mutableStateOf<List<RecipeUiModel>>(emptyList()) }
@@ -77,6 +78,7 @@ private fun RecipesScreenPreviewLight() {
             onRecipeClick = {},
             categoryId = 0,
             categoryTitle = "",
+            categoryImageUrl = "",
             modifier = Modifier.fillMaxSize(),
         )
     }
@@ -90,6 +92,7 @@ private fun RecipesScreenPreviewDark() {
             onRecipeClick = {},
             categoryId = 0,
             categoryTitle = "",
+            categoryImageUrl = "",
             modifier = Modifier.fillMaxSize(),
         )
     }

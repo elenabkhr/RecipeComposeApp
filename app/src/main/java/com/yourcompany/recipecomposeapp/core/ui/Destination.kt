@@ -1,23 +1,32 @@
 package com.yourcompany.recipecomposeapp.core.ui
 
-import com.yourcompany.recipecomposeapp.data.DEEP_LINK_BASE_URL
+import com.yourcompany.recipecomposeapp.data.Constants
+import java.net.URLEncoder
 
 sealed class Destination(val route: String) {
     object Categories : Destination("categories")
     object Favorites : Destination("favorites")
-    object Recipes : Destination("recipes/{categoryId}/{categoryTitle}/{categoryImageUrl}") {
-        fun createRoute(categoryId: Int, categoryTitle: String, categoryImageUrl: String) =
-            "recipes/$categoryId/$categoryTitle/$categoryImageUrl"
+
+    object Recipes :
+        Destination("recipes/{${Constants.KEY_CATEGORY_ID}}/{${Constants.KEY_CATEGORY_TITLE}}/{${Constants.KEY_CATEGORY_IMAGE_URL}}") {
+
+        fun createRecipesRoute(
+            categoryId: Int, categoryTitle: String, categoryImageUrl: String
+        ): String {
+            val encodedTitle = URLEncoder.encode(categoryTitle, "UTF-8")
+            val encodedImage = URLEncoder.encode(categoryImageUrl, "UTF-8")
+            return "recipes/$categoryId/$encodedTitle/$encodedImage"
+        }
     }
 
     object RecipeDetails : Destination("recipe/{id}") {
-        fun createRoute(id: Int) =
+        fun createDetailsRoute(id: Int) =
             "recipe/$id"
     }
 
     companion object {
         fun createRecipeDeepLink(recipeId: Int): String {
-            return "$DEEP_LINK_BASE_URL/recipe/$recipeId"
+            return "${Constants.DEEP_LINK_BASE_URL}/recipe/$recipeId"
         }
     }
 }

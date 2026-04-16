@@ -155,7 +155,7 @@ object RecipeRepositoryStub {
         return categories
     }
 
-    fun getRecipesByCategoryId(categoryId: Int): List<RecipeDto> {
+    fun getRecipesByCategoryId(categoryId: Int?): List<RecipeDto> {
         return when (categoryId) {
             0 -> burgerRecipes
             else -> emptyList()

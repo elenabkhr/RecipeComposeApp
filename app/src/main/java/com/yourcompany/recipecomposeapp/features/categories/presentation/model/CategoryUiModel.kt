@@ -1,7 +1,7 @@
 package com.yourcompany.recipecomposeapp.features.categories.presentation.model
 
 import androidx.compose.runtime.Immutable
-import com.yourcompany.recipecomposeapp.data.ASSETS_URI_PREFIX
+import com.yourcompany.recipecomposeapp.data.Constants
 import com.yourcompany.recipecomposeapp.data.model.CategoryDto
 
 @Immutable
@@ -16,5 +16,5 @@ fun CategoryDto.toUiModel() = CategoryUiModel(
     id = id,
     title = title,
     description = description,
-    imageUrl = if (imageUrl.startsWith("http")) imageUrl else ASSETS_URI_PREFIX + imageUrl
+    imageUrl = if (imageUrl.startsWith("http")) imageUrl else Constants.ASSETS_URI_PREFIX + imageUrl
 )

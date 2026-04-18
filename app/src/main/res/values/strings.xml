@@ -7,6 +7,8 @@
     <string name="ingredients_title">Ингредиенты</string>
     <string name="icon_share">Поделиться</string>
     <string name="no_favorite_recipe">Вы еще не добавили ни одного рецепта в избранное</string>
+    <string name="data_upload_error">Ошибка загрузки данных</string>
+    <string name="list_recipes_empty">Список рецептов пока пуст</string>
 
     <plurals name="portions_count">
         <item quantity="one">Порция: %d</item>

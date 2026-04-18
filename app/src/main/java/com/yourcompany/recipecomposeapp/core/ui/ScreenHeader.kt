@@ -28,14 +28,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
 import com.yourcompany.recipecomposeapp.R
 import com.yourcompany.recipecomposeapp.ui.theme.RecipesAppTheme
 import com.yourcompany.recipecomposeapp.ui.theme.recipesAppTypography
 
 @Composable
 fun ScreenHeader(
-    text: String,
+    text: String?,
     painter: Painter = painterResource(id = R.drawable.bcg_placeholder),
+    imageUrl: String? = null,
     showShareButton: Boolean = false,
     onShareClick: () -> Unit = {},
     showFavoriteButton: Boolean = false,
@@ -47,12 +49,21 @@ fun ScreenHeader(
             .fillMaxWidth()
             .height(224.dp)
     ) {
-        Image(
-            painter = painter,
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier.fillMaxSize(),
-        )
+        if (imageUrl != null) {
+            AsyncImage(
+                model = imageUrl,
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxSize(),
+            )
+        } else {
+            Image(
+                painter = painter,
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxSize(),
+            )
+        }
 
         if (showShareButton) {
             Surface(
@@ -113,7 +124,7 @@ fun ScreenHeader(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = text.uppercase(),
+                    text = text?.uppercase() ?: "",
                     style = recipesAppTypography.displayLarge,
                     color = MaterialTheme.colorScheme.primary
                 )

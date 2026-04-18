@@ -1,8 +1,10 @@
-package com.yourcompany.recipecomposeapp.features.categories.presentation.model
+package com.yourcompany.recipecomposeapp.features.categories.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yourcompany.recipecomposeapp.data.repository.RecipeRepositoryStub
+import com.yourcompany.recipecomposeapp.features.categories.presentation.model.CategoriesUiState
+import com.yourcompany.recipecomposeapp.features.categories.presentation.model.toUiModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -22,19 +24,18 @@ class CategoriesViewModel : ViewModel() {
             _uiState.update { currentState ->
                 currentState.copy(isLoading = true, isError = null)
             }
-        }
+            try {
+                val categories = RecipeRepositoryStub
+                    .getCategories()
+                    .map { it.toUiModel() }
 
-        try {
-            val categories = RecipeRepositoryStub
-                .getCategories()
-                .map { it.toUiModel() }
-
-            _uiState.update { currentState ->
-                currentState.copy(categories = categories, isLoading = false)
-            }
-        } catch (e: Exception) {
-            _uiState.update { currentState ->
-                currentState.copy(isLoading = false, isError = e.message)
+                _uiState.update { currentState ->
+                    currentState.copy(categories = categories, isLoading = false)
+                }
+            } catch (e: Exception) {
+                _uiState.update { currentState ->
+                    currentState.copy(isLoading = false, isError = e.message)
+                }
             }
         }
     }

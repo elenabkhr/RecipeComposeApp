@@ -11,7 +11,7 @@ data class RecipeDetailsUiState(
     val scaledIngredients: List<IngredientUiModel>
         get() {
             val recipe = recipe ?: return emptyList()
-            val multiplier = recipe.servings.toDouble() / recipe.servings
+            val multiplier = portions.toDouble() / recipe.servings
 
             return recipe.ingredients.map { ingredient ->
                 ingredient.copy(quantity = (ingredient.quantity * multiplier))

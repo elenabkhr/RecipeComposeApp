@@ -19,12 +19,9 @@ class RecipeDetailsViewModel(application: Application) : AndroidViewModel(applic
     private val _uiState = MutableStateFlow(RecipeDetailsUiState())
     val uiState: StateFlow<RecipeDetailsUiState> = _uiState.asStateFlow()
 
-    init {
-        observeFavorite()
-    }
-
     fun initializeWithRecipe(recipe: RecipeDto) {
         _uiState.update { it.copy(recipe = recipe.toUiModel()) }
+        observeFavorite()
     }
 
     private fun observeFavorite() {

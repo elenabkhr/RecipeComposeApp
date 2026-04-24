@@ -11,43 +11,33 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.yourcompany.recipecomposeapp.R
 import com.yourcompany.recipecomposeapp.core.ui.ScreenHeader
 import com.yourcompany.recipecomposeapp.data.model.RecipeDto
 import com.yourcompany.recipecomposeapp.features.details.presentation.model.IngredientUiModel
-import com.yourcompany.recipecomposeapp.features.recipes.presentation.model.toUiModel
 import com.yourcompany.recipecomposeapp.ui.theme.recipesAppTypography
 import com.yourcompany.recipecomposeapp.core.utils.shareRecipe
-import kotlin.collections.map
+import com.yourcompany.recipecomposeapp.features.details.presentation.RecipeDetailsViewModel
 
 @Composable
 fun RecipeDetailsScreen(
     recipe: RecipeDto,
     modifier: Modifier = Modifier,
-    isFavorite: Boolean,
-    onFavoriteToggle: () -> Unit,
 ) {
-    val recipe = recipe.toUiModel()
+    val viewModel: RecipeDetailsViewModel = viewModel()
+    val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
 
-    var currentPortions by rememberSaveable { mutableIntStateOf(recipe.servings) }
-
-    val scaledIngredients = remember(recipe.ingredients, currentPortions) {
-        val multiplier = currentPortions.toDouble() / recipe.servings
-
-        recipe.ingredients.map { ingredient ->
-            ingredient.copy(quantity = (ingredient.quantity * multiplier))
-        }
+    LaunchedEffect(recipe) {
+        recipe.let { viewModel.initializeWithRecipe(it) }
     }
 
     Column(
@@ -55,18 +45,18 @@ fun RecipeDetailsScreen(
         modifier = modifier.verticalScroll(rememberScrollState())
     ) {
         ScreenHeader(
-            text = recipe.title,
-            painter = painterResource(id = R.drawable.bcg_categories),
+            text = uiState.recipe?.title,
+            imageUrl = uiState.recipe?.imageUrl,
             showShareButton = true,
             onShareClick = { shareRecipe(context, recipe.id, recipe.title) },
             showFavoriteButton = true,
-            isFavorite = isFavorite,
-            onFavoriteToggle = onFavoriteToggle,
+            isFavorite = uiState.isFavorite,
+            onFavoriteToggle = { viewModel.toggleFavorite() },
         )
 
-        PortionsSelector(currentPortions) { newValue -> currentPortions = newValue }
+        PortionsSelector(uiState.portions) { viewModel.updatePortions(it) }
 
-        IngredientList(scaledIngredients)
+        IngredientList(uiState.scaledIngredients)
 
         Text(
             text = stringResource(id = R.string.cooking_method).uppercase(),

@@ -22,11 +22,11 @@ class RecipesViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
 
     private val categoryTitle =
         savedStateHandle.get<String>(Constants.KEY_CATEGORY_TITLE).let { title ->
-            URLDecoder.decode(title, "UTF-8") ?: ""
+            URLDecoder.decode(title ?: "", "UTF-8")
         }
     private val categoryImageUrl =
-        savedStateHandle.get<String>(Constants.KEY_CATEGORY_IMAGE_URL).let {
-            URLDecoder.decode(it, "UTF-8") ?: ""
+        savedStateHandle.get<String>(Constants.KEY_CATEGORY_IMAGE_URL).let { imageUrl ->
+            URLDecoder.decode(imageUrl ?: "", "UTF-8")
         }
 
     init {

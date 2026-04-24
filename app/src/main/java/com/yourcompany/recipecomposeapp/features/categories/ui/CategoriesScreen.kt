@@ -84,7 +84,7 @@ fun CategoriesScreen(
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
                 modifier = Modifier.fillMaxSize()
             ) {
-                items(uiState.categories) { category ->
+                items(uiState.categories, key = { it.id }) { category ->
                     CategoryItem(
                         category = category,
                         onClick = onCategoryClick,

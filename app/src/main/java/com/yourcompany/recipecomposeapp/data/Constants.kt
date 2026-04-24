@@ -7,4 +7,5 @@ object Constants {
     const val KEY_CATEGORY_ID = "categoryId"
     const val KEY_CATEGORY_TITLE = "categoryTitle"
     const val KEY_CATEGORY_IMAGE_URL = "categoryImageUrl"
+    const val KEY_RECIPE_ID = "recipeId"
 }

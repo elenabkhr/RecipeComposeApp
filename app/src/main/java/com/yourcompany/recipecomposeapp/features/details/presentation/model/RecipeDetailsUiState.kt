@@ -4,17 +4,9 @@ import com.yourcompany.recipecomposeapp.features.recipes.presentation.model.Reci
 
 data class RecipeDetailsUiState(
     val recipe: RecipeUiModel? = null,
+    val currentPortions: Int = 1,
+    val scaledIngredients: List<IngredientUiModel> = emptyList(),
     val isFavorite: Boolean = false,
-    val portions: Int = 1,
     val isLoading: Boolean = false,
-) {
-    val scaledIngredients: List<IngredientUiModel>
-        get() {
-            val recipe = recipe ?: return emptyList()
-            val multiplier = portions.toDouble() / recipe.servings
-
-            return recipe.ingredients.map { ingredient ->
-                ingredient.copy(quantity = (ingredient.quantity * multiplier))
-            }
-        }
-}
+    val isError: String? = null,
+)

@@ -19,9 +19,9 @@ sealed class Destination(val route: String) {
         }
     }
 
-    object RecipeDetails : Destination("recipe/{id}") {
-        fun createDetailsRoute(id: Int) =
-            "recipe/$id"
+    object RecipeDetails : Destination("recipe/{${Constants.KEY_RECIPE_ID}}") {
+        fun createDetailsRoute(recipeId: Int) =
+            "recipe/$recipeId"
     }
 
     companion object {

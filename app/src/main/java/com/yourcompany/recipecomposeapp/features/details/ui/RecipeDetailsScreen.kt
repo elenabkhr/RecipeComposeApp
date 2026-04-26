@@ -1,44 +1,45 @@
 package com.yourcompany.recipecomposeapp.features.details.ui
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.yourcompany.recipecomposeapp.R
 import com.yourcompany.recipecomposeapp.core.ui.ScreenHeader
-import com.yourcompany.recipecomposeapp.data.model.RecipeDto
 import com.yourcompany.recipecomposeapp.features.details.presentation.model.IngredientUiModel
 import com.yourcompany.recipecomposeapp.ui.theme.recipesAppTypography
 import com.yourcompany.recipecomposeapp.core.utils.shareRecipe
 import com.yourcompany.recipecomposeapp.features.details.presentation.RecipeDetailsViewModel
 
 @Composable
-fun RecipeDetailsScreen(
-    recipe: RecipeDto,
-    modifier: Modifier = Modifier,
-) {
+fun RecipeDetailsScreen(modifier: Modifier = Modifier) {
     val viewModel: RecipeDetailsViewModel = viewModel()
     val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
 
-    LaunchedEffect(recipe) {
-        recipe.let { viewModel.initializeWithRecipe(it) }
-    }
+//    LaunchedEffect(recipe) {
+//        recipe.let { viewModel.initializeWithRecipe(it) }
+//    }
 
     Column(
         verticalArrangement = Arrangement.spacedBy(space = 16.dp),
@@ -48,24 +49,54 @@ fun RecipeDetailsScreen(
             text = uiState.recipe?.title,
             imageUrl = uiState.recipe?.imageUrl,
             showShareButton = true,
-            onShareClick = { shareRecipe(context, recipe.id, recipe.title) },
+            onShareClick = { uiState.recipe?.let { shareRecipe(context, it.id, it.title) } },
             showFavoriteButton = true,
             isFavorite = uiState.isFavorite,
             onFavoriteToggle = { viewModel.toggleFavorite() },
         )
 
-        PortionsSelector(uiState.portions) { viewModel.updatePortions(it) }
+        when {
+            uiState.isLoading -> {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Center
+                ) { CircularProgressIndicator() }
+            }
 
-        IngredientList(uiState.scaledIngredients)
+            uiState.isError != null -> {
+                uiState.isError?.let { error ->
+                    Log.e("CategoriesScreen", error)
+                }
 
-        Text(
-            text = stringResource(id = R.string.cooking_method).uppercase(),
-            style = recipesAppTypography.displayLarge,
-            color = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.padding(horizontal = 16.dp)
-        )
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 8.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = stringResource(R.string.data_upload_error),
+                        color = MaterialTheme.colorScheme.onSecondary,
+                        style = recipesAppTypography.labelLarge,
+                        textAlign = TextAlign.Center,
+                    )
+                }
+            }
 
-        MethodsList(recipe.method)
+            else -> {
+                PortionsSelector(uiState.currentPortions) { viewModel.updatePortions(it.toFloat()) }
+                IngredientList(uiState.scaledIngredients)
+
+                Text(
+                    text = stringResource(id = R.string.cooking_method).uppercase(),
+                    style = recipesAppTypography.displayLarge,
+                    color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.padding(horizontal = 16.dp)
+                )
+
+                MethodsList(uiState.recipe?.method ?: emptyList())
+            }
+        }
     }
 }
 

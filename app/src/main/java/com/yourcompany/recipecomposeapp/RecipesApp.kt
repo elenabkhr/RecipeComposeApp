@@ -13,7 +13,6 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.yourcompany.recipecomposeapp.data.repository.RecipeRepositoryStub.getRecipeById
 import com.yourcompany.recipecomposeapp.features.categories.ui.CategoriesScreen
 import com.yourcompany.recipecomposeapp.features.details.ui.RecipeDetailsScreen
 import com.yourcompany.recipecomposeapp.features.favorites.ui.FavoritesScreen
@@ -110,11 +109,13 @@ fun RecipesApp(deepLinkIntent: Intent?) {
 
                 composable(
                     route = Destination.RecipeDetails.route,
-                    arguments = listOf(navArgument("id") { type = NavType.IntType })
-                ) { backStackEntry ->
-                    val recipeId = backStackEntry.arguments?.getInt("id") ?: 0
-                    val recipe = getRecipeById(recipeId)
-                    recipe?.let { RecipeDetailsScreen(recipe = it) }
+                    arguments = listOf(navArgument("recipeId") { type = NavType.IntType })
+                ) {
+                    RecipeDetailsScreen()
+
+//                    val recipeId = backStackEntry.arguments?.getInt("id") ?: 0
+//                    val recipe = getRecipeById(recipeId)
+//                    recipe?.let { RecipeDetailsScreen(recipe = it) }
                 }
             }
         }

@@ -19,6 +19,7 @@ class RecipesViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
     val uiState: StateFlow<RecipesUiState> = _uiState.asStateFlow()
 
     private val categoryId = savedStateHandle.get<Int>(Constants.KEY_CATEGORY_ID)
+        ?: throw IllegalArgumentException("categoryId is required")
 
     private val categoryTitle =
         savedStateHandle.get<String>(Constants.KEY_CATEGORY_TITLE).let { title ->

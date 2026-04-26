@@ -16,7 +16,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlin.math.roundToInt
 
 class RecipeDetailsViewModel(
     application: Application,
@@ -76,8 +75,8 @@ class RecipeDetailsViewModel(
         }
     }
 
-    fun updatePortions(sliderValue: Float) {
-        val newPortions = sliderValue.roundToInt().coerceAtLeast(1)
+    fun updatePortions(sliderValue: Int) {
+        val newPortions = sliderValue.coerceAtLeast(1)
         _uiState.update {
             it.copy(
                 currentPortions = newPortions,

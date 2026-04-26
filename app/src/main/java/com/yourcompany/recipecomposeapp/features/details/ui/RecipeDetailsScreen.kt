@@ -65,7 +65,7 @@ fun RecipeDetailsScreen(modifier: Modifier = Modifier) {
 
             uiState.isError != null -> {
                 uiState.isError?.let { error ->
-                    Log.e("CategoriesScreen", error)
+                    Log.e("RecipeDetailsScreen", error)
                 }
 
                 Box(
@@ -84,7 +84,7 @@ fun RecipeDetailsScreen(modifier: Modifier = Modifier) {
             }
 
             else -> {
-                PortionsSelector(uiState.currentPortions) { viewModel.updatePortions(it.toFloat()) }
+                PortionsSelector(uiState.currentPortions) { viewModel.updatePortions(it) }
                 IngredientList(uiState.scaledIngredients)
 
                 Text(

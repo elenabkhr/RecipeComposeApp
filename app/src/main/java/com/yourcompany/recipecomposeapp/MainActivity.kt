@@ -12,68 +12,66 @@ import androidx.compose.runtime.setValue
 import com.yourcompany.recipecomposeapp.data.model.CategoryDto
 import com.yourcompany.recipecomposeapp.data.model.RecipeDto
 import kotlinx.serialization.json.Json
-import java.net.HttpURLConnection
-import java.net.URL
+import okhttp3.OkHttpClient
+import okhttp3.Request
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 class MainActivity : ComponentActivity() {
     private var deepLinkIntent by mutableStateOf<Intent?>(null)
     private val threadPool: ExecutorService = Executors.newFixedThreadPool(10)
+    private val okHttpClient = OkHttpClient()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         threadPool.execute {
-            val url = URL("https://recipes.androidsprint.ru/api/category")
-            val categoriesConnection = url.openConnection() as HttpURLConnection
+            val request: Request = Request.Builder()
+                .url("https://recipes.androidsprint.ru/api/category")
+                .build()
 
             try {
-                categoriesConnection.connect()
+                okHttpClient.newCall(request).execute().use { response ->
+                    val categoriesBody = response.body.string()
+                    val categories = Json.decodeFromString<List<CategoryDto>>(categoriesBody)
 
-                val jsonCategories =
-                    categoriesConnection.inputStream.bufferedReader().use { it.readText() }
-                val listCategory = Json.decodeFromString<List<CategoryDto>>(jsonCategories)
+                    Log.i("!!!", "Количество категорий: ${categories.size}")
+                    Log.i("Pool", "Выполняю запрос на потоке: ${Thread.currentThread().name}")
 
-                Log.i("!!!", "Количество категорий: ${listCategory.size}")
-                Log.i("Pool", "Выполняю запрос на потоке: ${Thread.currentThread().name}")
+                    categories.forEach { category ->
+                        threadPool.execute {
+                            val request: Request = Request.Builder()
+                                .url("https://recipes.androidsprint.ru/api/category/${category.id}/recipes")
+                                .build()
 
-                listCategory.forEach { category ->
-                    threadPool.execute {
-                        val recipesUrl =
-                            URL("https://recipes.androidsprint.ru/api/category/${category.id}/recipes")
-                        val recipesConnection = recipesUrl.openConnection() as HttpURLConnection
-                        try {
-                            recipesConnection.connect()
+                            try {
+                                okHttpClient.newCall(request).execute().use { response ->
+                                    val recipesBody = response.body.string()
+                                    val recipes =
+                                        Json.decodeFromString<List<RecipeDto>>(recipesBody)
 
-                            val jsonRecipes =
-                                recipesConnection.inputStream.bufferedReader().use { it.readText() }
-                            val recipes = Json.decodeFromString<List<RecipeDto>>(jsonRecipes)
+                                    Log.i(
+                                        "Pool",
+                                        "Выполняю запрос на потоке: ${Thread.currentThread().name}"
+                                    )
+                                    Log.i(
+                                        "!!!",
+                                        "Название категории: ${category.title}, Количество рецептов: ${recipes.size}"
+                                    )
 
-                            Log.i(
-                                "Pool",
-                                "Выполняю запрос на потоке: ${Thread.currentThread().name}"
-                            )
-                            Log.i(
-                                "!!!",
-                                "Название категории: ${category.title}, Количество рецептов: ${recipes.size}"
-                            )
-
-                        } catch (e: Exception) {
-                            Log.e(
-                                "!!!",
-                                "Ошибка загрузки рецептов для категории: ${category.title}",
-                                e
-                            )
-                        } finally {
-                            recipesConnection.disconnect()
+                                }
+                            } catch (e: Exception) {
+                                Log.e(
+                                    "!!!",
+                                    "Ошибка загрузки рецептов для категории: ${category.title}",
+                                    e
+                                )
+                            }
                         }
                     }
                 }
             } catch (e: Exception) {
                 Log.e("!!!", "Ошибка загрузки категорий", e)
-            } finally {
-                categoriesConnection.disconnect()
             }
         }
 

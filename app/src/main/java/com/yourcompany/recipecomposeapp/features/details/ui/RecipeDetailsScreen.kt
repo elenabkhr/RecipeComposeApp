@@ -23,7 +23,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.yourcompany.recipecomposeapp.R
 import com.yourcompany.recipecomposeapp.core.ui.ScreenHeader
 import com.yourcompany.recipecomposeapp.features.details.presentation.model.IngredientUiModel
@@ -32,14 +31,12 @@ import com.yourcompany.recipecomposeapp.core.utils.shareRecipe
 import com.yourcompany.recipecomposeapp.features.details.presentation.RecipeDetailsViewModel
 
 @Composable
-fun RecipeDetailsScreen(modifier: Modifier = Modifier) {
-    val viewModel: RecipeDetailsViewModel = viewModel()
+fun RecipeDetailsScreen(
+    modifier: Modifier = Modifier,
+    viewModel: RecipeDetailsViewModel,
+) {
     val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
-
-//    LaunchedEffect(recipe) {
-//        recipe.let { viewModel.initializeWithRecipe(it) }
-//    }
 
     Column(
         verticalArrangement = Arrangement.spacedBy(space = 16.dp),
@@ -57,9 +54,9 @@ fun RecipeDetailsScreen(modifier: Modifier = Modifier) {
 
         when {
             uiState.isLoading -> {
-                Column(
+                Box(
                     modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.Center
+                    contentAlignment = Alignment.Center,
                 ) { CircularProgressIndicator() }
             }
 

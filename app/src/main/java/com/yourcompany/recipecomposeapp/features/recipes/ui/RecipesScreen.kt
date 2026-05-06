@@ -30,9 +30,9 @@ import com.yourcompany.recipecomposeapp.ui.theme.recipesAppTypography
 @Composable
 fun RecipesScreen(
     onRecipeClick: (Int) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: RecipesViewModel,
 ) {
-    val viewModel: RecipesViewModel = viewModel()
     val uiState by viewModel.uiState.collectAsState()
 
     Column(modifier = modifier) {
@@ -43,9 +43,9 @@ fun RecipesScreen(
 
         when {
             uiState.isLoading -> {
-                Column(
+                Box(
                     modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.Center
+                    contentAlignment = Alignment.Center,
                 ) { CircularProgressIndicator() }
             }
 
@@ -94,6 +94,7 @@ private fun RecipesScreenPreviewLight() {
         RecipesScreen(
             onRecipeClick = {},
             modifier = Modifier.fillMaxSize(),
+            viewModel = viewModel(),
         )
     }
 }
@@ -105,6 +106,7 @@ private fun RecipesScreenPreviewDark() {
         RecipesScreen(
             onRecipeClick = {},
             modifier = Modifier.fillMaxSize(),
+            viewModel = viewModel(),
         )
     }
 }

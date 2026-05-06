@@ -6,7 +6,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.yourcompany.recipecomposeapp.core.utils.FavoriteDataStoreManager
 import com.yourcompany.recipecomposeapp.data.Constants
-import com.yourcompany.recipecomposeapp.data.repository.RecipeRepositoryStub.getRecipeById
+import com.yourcompany.recipecomposeapp.data.repository.RecipesRepository
 import com.yourcompany.recipecomposeapp.features.details.presentation.model.IngredientUiModel
 import com.yourcompany.recipecomposeapp.features.details.presentation.model.RecipeDetailsUiState
 import com.yourcompany.recipecomposeapp.features.details.presentation.model.toUiModel
@@ -20,6 +20,7 @@ import kotlinx.coroutines.launch
 class RecipeDetailsViewModel(
     application: Application,
     savedStateHandle: SavedStateHandle,
+    private val repository: RecipesRepository,
 ) : AndroidViewModel(application) {
     private val favoriteManager = FavoriteDataStoreManager(application)
     private val recipeId = savedStateHandle.get<Int>(Constants.KEY_RECIPE_ID)
@@ -33,23 +34,25 @@ class RecipeDetailsViewModel(
     }
 
     fun loadRecipe(recipeId: Int) {
-        _uiState.update { currentState ->
-            currentState.copy(isLoading = true, isError = null)
-        }
-
-        try {
-            val recipe = getRecipeById(recipeId)
+        viewModelScope.launch {
             _uiState.update { currentState ->
-                currentState.copy(
-                    recipe = recipe?.toUiModel(),
-                    scaledIngredients = recipe?.ingredients?.map { it.toUiModel() } ?: emptyList(),
-                    isLoading = false,
-                )
+                currentState.copy(isLoading = true, isError = null)
             }
-            observeFavorite()
-        } catch (e: Exception) {
-            _uiState.update { currentState ->
-                currentState.copy(isLoading = false, isError = e.message)
+
+            try {
+                val recipe = repository.getRecipe(recipeId)
+                _uiState.update { currentState ->
+                    currentState.copy(
+                        recipe = recipe.toUiModel(),
+                        scaledIngredients = recipe.ingredients.map { it.toUiModel() },
+                        isLoading = false,
+                    )
+                }
+                observeFavorite()
+            } catch (e: Exception) {
+                _uiState.update { currentState ->
+                    currentState.copy(isLoading = false, isError = e.message)
+                }
             }
         }
     }

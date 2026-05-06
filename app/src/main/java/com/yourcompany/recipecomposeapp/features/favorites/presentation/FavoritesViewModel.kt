@@ -5,7 +5,7 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.yourcompany.recipecomposeapp.core.utils.FavoriteDataStoreManager
-import com.yourcompany.recipecomposeapp.data.repository.RecipeRepositoryStub
+import com.yourcompany.recipecomposeapp.data.repository.RecipesRepository
 import com.yourcompany.recipecomposeapp.features.recipes.presentation.model.toUiModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,9 +14,11 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class FavoritesViewModel(application: Application) : AndroidViewModel(application) {
+class FavoritesViewModel(
+    application: Application,
+    private val repository: RecipesRepository,
+) : AndroidViewModel(application) {
     private val favoriteManager = FavoriteDataStoreManager(application)
-    private val repository = RecipeRepositoryStub
 
     private val _uiState = MutableStateFlow(FavoritesUiState())
     val uiState: StateFlow<FavoritesUiState> = _uiState.asStateFlow()
@@ -35,7 +37,7 @@ class FavoritesViewModel(application: Application) : AndroidViewModel(applicatio
                 .map { ids ->
                     ids.mapNotNull {
                         try {
-                            repository.getRecipeById(it.toIntOrNull())
+                            repository.getRecipe(it.toInt())
                         } catch (e: NumberFormatException) {
                             Log.e("FavoritesViewModel", "Failed to get recipes by ids", e)
                             null

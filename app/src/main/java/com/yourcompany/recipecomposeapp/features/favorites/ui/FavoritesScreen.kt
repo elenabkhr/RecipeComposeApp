@@ -31,10 +31,10 @@ import com.yourcompany.recipecomposeapp.ui.theme.recipesAppTypography
 
 @Composable
 fun FavoritesScreen(
+    viewModel: FavoritesViewModel,
     onRecipeClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val viewModel: FavoritesViewModel = viewModel()
     val uiState by viewModel.uiState.collectAsState()
 
     Column(modifier = modifier) {
@@ -44,9 +44,9 @@ fun FavoritesScreen(
         )
         when {
             uiState.isLoading -> {
-                Column(
+                Box(
                     modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.Center
+                    contentAlignment = Alignment.Center,
                 ) { CircularProgressIndicator() }
             }
 
@@ -110,7 +110,8 @@ private fun FavoritesScreenPreviewLight() {
     RecipesAppTheme(darkTheme = false) {
         FavoritesScreen(
             onRecipeClick = {},
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize(),
+            viewModel = viewModel(),
         )
     }
 }
@@ -121,7 +122,8 @@ private fun FavoritesScreenPreviewDark() {
     RecipesAppTheme(darkTheme = true) {
         FavoritesScreen(
             onRecipeClick = {},
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize(),
+            viewModel = viewModel(),
         )
     }
 }

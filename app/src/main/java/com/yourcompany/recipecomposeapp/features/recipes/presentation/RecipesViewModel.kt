@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yourcompany.recipecomposeapp.data.Constants
-import com.yourcompany.recipecomposeapp.data.repository.RecipeRepositoryStub
+import com.yourcompany.recipecomposeapp.data.repository.RecipesRepository
 import com.yourcompany.recipecomposeapp.features.recipes.presentation.model.RecipesUiState
 import com.yourcompany.recipecomposeapp.features.recipes.presentation.model.toUiModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,7 +14,10 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.net.URLDecoder
 
-class RecipesViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
+class RecipesViewModel(
+    savedStateHandle: SavedStateHandle,
+    private val repository: RecipesRepository,
+) : ViewModel() {
     private val _uiState = MutableStateFlow(RecipesUiState())
     val uiState: StateFlow<RecipesUiState> = _uiState.asStateFlow()
 
@@ -41,9 +44,8 @@ class RecipesViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
             }
 
             try {
-                val recipes = RecipeRepositoryStub
-                    .getRecipesByCategoryId(categoryId)
-                    .map { dto -> dto.toUiModel() }
+                val recipes =
+                    repository.getRecipesByCategories(categoryId).map { dto -> dto.toUiModel() }
 
                 _uiState.update { currentState ->
                     currentState.copy(

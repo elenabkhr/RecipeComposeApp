@@ -34,20 +34,40 @@ import com.yourcompany.recipecomposeapp.ui.theme.RecipesAppTheme
 import kotlinx.coroutines.delay
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import java.util.concurrent.TimeUnit
 
 @Composable
 fun RecipesApp(deepLinkIntent: Intent?) {
     val navController = rememberNavController()
 
-    val json = Json { ignoreUnknownKeys = true; coerceInputValues = true }
+    val logging = HttpLoggingInterceptor().apply {
+        level = if (BuildConfig.DEBUG) {
+            HttpLoggingInterceptor.Level.BODY
+        } else {
+            HttpLoggingInterceptor.Level.NONE
+        }
+    }
 
-    val retrofit = Retrofit.Builder()
-        .baseUrl(NetworkConfig.BASE_URL)
-        .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
+    val okHttpClient = OkHttpClient.Builder()
+        .connectTimeout(15, TimeUnit.SECONDS)
+        .readTimeout(30, TimeUnit.SECONDS)
+        .writeTimeout(30, TimeUnit.SECONDS)
+        .addInterceptor(logging)
         .build()
 
-    val apiService: RecipesApiService = retrofit.create(RecipesApiService::class.java)
+    val json = remember { Json { ignoreUnknownKeys = true; coerceInputValues = true } }
+    val retrofit = remember {
+        Retrofit.Builder()
+            .baseUrl(NetworkConfig.BASE_URL)
+            .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
+            .client(okHttpClient)
+            .build()
+    }
+    val apiService: RecipesApiService = remember { retrofit.create(RecipesApiService::class.java) }
+
     val repository = remember { RecipesRepositoryImpl(apiService) }
 
     LaunchedEffect(deepLinkIntent) {

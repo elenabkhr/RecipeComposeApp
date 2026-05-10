@@ -6,7 +6,7 @@ import com.yourcompany.recipecomposeapp.data.model.CategoryDto
 import com.yourcompany.recipecomposeapp.data.model.RecipeDto
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import okio.IOException
+import java.io.IOException
 
 class RecipesRepositoryImpl(private val apiService: RecipesApiService) : RecipesRepository {
     override suspend fun getCategories(): List<CategoryDto> {

@@ -26,12 +26,17 @@ fun RecipeImage(
 ) {
     var isLoading by remember { mutableStateOf(true) }
 
+    val context = LocalContext.current
+    val imageRequest = remember {
+        ImageRequest.Builder(context)
+            .data(imageUrl)
+            .crossfade(300)
+            .build()
+    }
+
     Box(modifier = modifier) {
         AsyncImage(
-            model = ImageRequest.Builder(LocalContext.current)
-                .data(imageUrl)
-                .crossfade(300)
-                .build(),
+            model = imageRequest,
             contentDescription = contentDescription,
             modifier = modifier,
             contentScale = contentScale,

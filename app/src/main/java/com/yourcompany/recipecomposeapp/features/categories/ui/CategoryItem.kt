@@ -12,12 +12,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil3.compose.AsyncImage
-import com.yourcompany.recipecomposeapp.R
+import com.yourcompany.recipecomposeapp.core.ui.RecipeImage
 import com.yourcompany.recipecomposeapp.features.categories.presentation.model.CategoryUiModel
 import com.yourcompany.recipecomposeapp.ui.theme.RecipesAppTheme
 import com.yourcompany.recipecomposeapp.ui.theme.recipesAppTypography
@@ -38,16 +35,12 @@ fun CategoryItem(
         onClick = { onClick(category.id, category.title, category.imageUrl) },
     ) {
         Column(Modifier.fillMaxSize()) {
-
-            AsyncImage(
-                model = category.imageUrl,
-                contentDescription = null,
-                placeholder = painterResource(id = R.drawable.bcg_placeholder),
-                error = painterResource(id = R.drawable.bcg_error),
+            RecipeImage(
+                imageUrl = category.imageUrl,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(130.dp),
-                contentScale = ContentScale.Crop
+                contentDescription = null,
             )
 
             Text(

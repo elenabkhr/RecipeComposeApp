@@ -4,27 +4,41 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
+import com.yourcompany.recipecomposeapp.data.database.converter.Converters
 import com.yourcompany.recipecomposeapp.data.database.dao.CategoryDao
+import com.yourcompany.recipecomposeapp.data.database.dao.RecipeDao
 import com.yourcompany.recipecomposeapp.data.database.entity.CategoryEntity
+import com.yourcompany.recipecomposeapp.data.database.entity.RecipeEntity
 
+@TypeConverters(Converters::class)
 @Database(
-    entities = [CategoryEntity::class],
-    version = 1,
+    entities = [CategoryEntity::class, RecipeEntity::class],
+    version = 2,
     exportSchema = false,
 )
 
 abstract class RecipesDatabase : RoomDatabase() {
     abstract fun categoryDao(): CategoryDao
+    abstract fun recipeDao(): RecipeDao
 
     companion object {
+        @Volatile
+        private var INSTANCE: RecipesDatabase? = null
+
         fun buildDatabase(context: Context): RecipesDatabase {
-            return Room.databaseBuilder(
-                context,
-                RecipesDatabase::class.java,
-                "recipes_database"
-            )
-                .fallbackToDestructiveMigration()
-                .build()
+            return INSTANCE ?: synchronized(this) {
+
+                val instance = Room.databaseBuilder(
+                    context.applicationContext,
+                    RecipesDatabase::class.java,
+                    "recipes_database"
+                )
+                    .fallbackToDestructiveMigration()
+                    .build()
+                INSTANCE = instance
+                instance
+            }
         }
     }
 }

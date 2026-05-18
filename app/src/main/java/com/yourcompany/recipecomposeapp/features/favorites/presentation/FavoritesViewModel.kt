@@ -45,8 +45,8 @@ class FavoritesViewModel(
                     }
                 }
                 .collect { recipes ->
-                    _uiState.update {
-                        it.copy(
+                    _uiState.update { currentState ->
+                        currentState.copy(
                             recipes = recipes.map { it.toUiModel() },
                             isLoading = false
                         )

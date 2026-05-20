@@ -32,6 +32,9 @@ import com.yourcompany.recipecomposeapp.data.model.RecipeDto
 import com.yourcompany.recipecomposeapp.data.repository.RecipesRepository
 import com.yourcompany.recipecomposeapp.features.categories.presentation.CategoriesViewModel
 import com.yourcompany.recipecomposeapp.ui.theme.recipesAppTypography
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
+import kotlin.collections.emptyList
 
 @Composable
 fun CategoriesScreen(
@@ -107,13 +110,18 @@ private fun CategoriesScreenPreviewLight() {
             modifier = Modifier.fillMaxSize(),
             onCategoryClick = { _, _, _ -> },
             repository = object : RecipesRepository {
-                override suspend fun getCategories() = emptyList<CategoryDto>()
-                override suspend fun getRecipesByCategories(categoryId: Int) =
-                    emptyList<RecipeDto>()
+                override fun getCategories(): Flow<List<CategoryDto>> {
+                    return flowOf(emptyList())
+                }
+
+                override fun getRecipesByCategories(categoryId: Int): Flow<List<RecipeDto>> {
+                    return flowOf(emptyList())
+                }
 
                 override suspend fun getRecipe(recipeId: Int): RecipeDto = RecipeDto(
                     id = 0,
                     title = "title",
+                    categoryId = 1,
                     ingredients = emptyList(),
                     method = emptyList(),
                     imageUrl = "imageUrl"
@@ -131,13 +139,18 @@ private fun CategoriesScreenPreviewDark() {
             modifier = Modifier.fillMaxSize(),
             onCategoryClick = { _, _, _ -> },
             repository = object : RecipesRepository {
-                override suspend fun getCategories() = emptyList<CategoryDto>()
-                override suspend fun getRecipesByCategories(categoryId: Int) =
-                    emptyList<RecipeDto>()
+                override fun getCategories(): Flow<List<CategoryDto>> {
+                    return flowOf(emptyList())
+                }
+
+                override fun getRecipesByCategories(categoryId: Int): Flow<List<RecipeDto>> {
+                    return flowOf(emptyList())
+                }
 
                 override suspend fun getRecipe(recipeId: Int): RecipeDto = RecipeDto(
                     id = 0,
                     title = "title",
+                    categoryId = 1,
                     ingredients = emptyList(),
                     method = emptyList(),
                     imageUrl = "imageUrl"

@@ -121,7 +121,6 @@ private fun CategoriesScreenPreviewLight() {
                 override suspend fun getRecipe(recipeId: Int): RecipeDto = RecipeDto(
                     id = 0,
                     title = "title",
-                    categoryId = 1,
                     ingredients = emptyList(),
                     method = emptyList(),
                     imageUrl = "imageUrl"
@@ -150,7 +149,6 @@ private fun CategoriesScreenPreviewDark() {
                 override suspend fun getRecipe(recipeId: Int): RecipeDto = RecipeDto(
                     id = 0,
                     title = "title",
-                    categoryId = 1,
                     ingredients = emptyList(),
                     method = emptyList(),
                     imageUrl = "imageUrl"

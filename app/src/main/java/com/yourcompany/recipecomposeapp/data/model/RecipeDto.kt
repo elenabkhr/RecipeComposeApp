@@ -8,13 +8,12 @@ import kotlinx.serialization.json.Json
 data class RecipeDto(
     val id: Int,
     val title: String,
-    val categoryId: Int = 0,
     val ingredients: List<IngredientDto>,
     val method: List<String>,
     val imageUrl: String,
 )
 
-fun RecipeDto.toEntity() = RecipeEntity(
+fun RecipeDto.toEntity(categoryId: Int) = RecipeEntity(
     id = id,
     title = title,
     categoryId = categoryId,
@@ -26,7 +25,6 @@ fun RecipeDto.toEntity() = RecipeEntity(
 fun RecipeEntity.toDto() = RecipeDto(
     id = id,
     title = title,
-    categoryId = categoryId,
     ingredients = Json.decodeFromString<List<IngredientDto>>(ingredients),
     method = method.split("|||"),
     imageUrl = imageUrl,

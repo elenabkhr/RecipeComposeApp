@@ -39,7 +39,7 @@ class RecipesRepositoryImpl(
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val fresh = apiService.getRecipesByCategory(categoryId)
-                recipeDao.insertRecipes(fresh.map { it.toEntity() })
+                recipeDao.insertRecipes(fresh.map { it.toEntity(categoryId) })
                 Log.d("!!!", "Обновлено ${fresh.size} рецептов")
             } catch (e: IOException) {
                 Log.e("!!!", "Ошибка сетевого запроса `getRecipesByCategories`", e)

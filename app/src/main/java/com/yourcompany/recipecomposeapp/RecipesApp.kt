@@ -25,6 +25,7 @@ import com.yourcompany.recipecomposeapp.features.favorites.ui.FavoritesScreen
 import com.yourcompany.recipecomposeapp.core.ui.BottomNavigation
 import com.yourcompany.recipecomposeapp.core.ui.Destination
 import com.yourcompany.recipecomposeapp.data.Constants
+import com.yourcompany.recipecomposeapp.data.database.RecipesDatabase
 import com.yourcompany.recipecomposeapp.data.repository.RecipesRepositoryImpl
 import com.yourcompany.recipecomposeapp.features.details.presentation.RecipeDetailsViewModel
 import com.yourcompany.recipecomposeapp.features.favorites.presentation.FavoritesViewModel
@@ -42,6 +43,9 @@ import java.util.concurrent.TimeUnit
 @Composable
 fun RecipesApp(deepLinkIntent: Intent?) {
     val navController = rememberNavController()
+
+    val context = LocalContext.current
+    val database = remember { RecipesDatabase.buildDatabase(context) }
 
     val logging = remember {
         HttpLoggingInterceptor().apply {
@@ -72,7 +76,7 @@ fun RecipesApp(deepLinkIntent: Intent?) {
     }
     val apiService: RecipesApiService = remember { retrofit.create(RecipesApiService::class.java) }
 
-    val repository = remember { RecipesRepositoryImpl(apiService) }
+    val repository = remember { RecipesRepositoryImpl(apiService, database) }
 
     LaunchedEffect(deepLinkIntent) {
         deepLinkIntent?.data?.let { uri ->

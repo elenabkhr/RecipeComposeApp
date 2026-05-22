@@ -16,11 +16,11 @@ interface RecipeDao {
     fun getRecipesByCategory(categoryId: Int): Flow<List<RecipeEntity>>
 
     @Query("SELECT * FROM recipes WHERE id = :recipeId")
-    fun getRecipeById(recipeId: Int): Flow<RecipeEntity>?
+    fun getRecipeById(recipeId: Int): Flow<RecipeEntity?>
 
     @Query("SELECT * FROM recipes WHERE id IN (:recipeIds)")
     fun getRecipesByIds(recipeIds: List<Int>): Flow<List<RecipeEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun createRecipes(recipes: List<RecipeEntity>)
+    suspend fun insertRecipes(recipes: List<RecipeEntity>)
 }

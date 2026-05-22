@@ -12,7 +12,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.io.IOException
 
 class RecipesRepositoryImpl(
@@ -49,13 +48,15 @@ class RecipesRepositoryImpl(
             .map { entities -> entities.map { it.toDto() } }
     }
 
-    override suspend fun getRecipe(recipeId: Int): RecipeDto {
-        return withContext(Dispatchers.IO) {
+    override fun getRecipe(recipeId: Int): Flow<RecipeDto?> {
+        CoroutineScope(Dispatchers.IO).launch {
             try {
-                apiService.getRecipe(recipeId)
+                val fresh = apiService.getRecipe(recipeId)
+                Log.d("!!!", "Детали рецепта получены из API")
             } catch (e: IOException) {
-                throw IOException("Ошибка сетевого запроса `getRecipe`", e)
+                Log.e("!!!", "Ошибка обновления: ${e.message}")
             }
         }
+        return recipeDao.getRecipeById(recipeId).map { entity -> entity?.toDto() }
     }
 }

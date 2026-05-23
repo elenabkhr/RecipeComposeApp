@@ -62,8 +62,8 @@ class RecipeDetailsViewModel(
 
     private fun observeFavorite() {
         viewModelScope.launch {
-            _uiState.value.recipe?.let { favoriteManager.isFavoriteFlow(it.id) }
-                ?.collect { isFavorite ->
+            favoriteManager.isFavoriteFlow(recipeId)
+                .collect { isFavorite ->
                     _uiState.update { it.copy(isFavorite = isFavorite) }
                 }
         }

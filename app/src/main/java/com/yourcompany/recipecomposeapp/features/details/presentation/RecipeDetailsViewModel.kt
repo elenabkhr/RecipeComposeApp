@@ -48,7 +48,7 @@ class RecipeDetailsViewModel(
                             currentState.copy(
                                 recipe = recipe,
                                 scaledIngredients = recipe?.ingredients ?: emptyList(),
-                                isLoading = false,
+                                isLoading = recipe == null,
                             )
                         }
                     }
@@ -70,8 +70,6 @@ class RecipeDetailsViewModel(
     }
 
     fun toggleFavorite() {
-        val recipeId = _uiState.value.recipe?.id ?: return
-
         viewModelScope.launch {
             if (_uiState.value.isFavorite) {
                 favoriteManager.removeFavorite(recipeId)

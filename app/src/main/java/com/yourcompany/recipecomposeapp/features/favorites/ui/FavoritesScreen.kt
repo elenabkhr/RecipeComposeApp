@@ -84,7 +84,7 @@ fun FavoritesScreen(
                             )
                         }
                     }
-                } else {
+                } else if (uiState.isInitialized) {
                     Box(
                         modifier = Modifier
                             .fillMaxSize()

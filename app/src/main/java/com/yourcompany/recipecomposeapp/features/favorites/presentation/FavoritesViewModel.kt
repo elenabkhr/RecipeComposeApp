@@ -64,7 +64,8 @@ class FavoritesViewModel(
                     _uiState.update { currentState ->
                         currentState.copy(
                             recipes = recipes,
-                            isLoading = false
+                            isLoading = false,
+                            isInitialized = true,
                         )
                     }
                 }

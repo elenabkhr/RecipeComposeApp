@@ -14,7 +14,7 @@ import com.yourcompany.recipecomposeapp.data.database.entity.RecipeEntity
 @TypeConverters(Converters::class)
 @Database(
     entities = [CategoryEntity::class, RecipeEntity::class],
-    version = 2,
+    version = 3,
     exportSchema = false,
 )
 

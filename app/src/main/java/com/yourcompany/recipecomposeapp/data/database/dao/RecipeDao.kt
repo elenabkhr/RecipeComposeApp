@@ -23,4 +23,7 @@ interface RecipeDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertRecipes(recipes: List<RecipeEntity>)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertRecipe(recipe: RecipeEntity)
 }

@@ -13,7 +13,7 @@ data class RecipeDto(
     val imageUrl: String,
 )
 
-fun RecipeDto.toEntity(categoryId: Int) = RecipeEntity(
+fun RecipeDto.toEntity(categoryId: Int?) = RecipeEntity(
     id = id,
     title = title,
     categoryId = categoryId,

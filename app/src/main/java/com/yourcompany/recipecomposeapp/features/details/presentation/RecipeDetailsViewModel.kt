@@ -9,11 +9,11 @@ import com.yourcompany.recipecomposeapp.data.Constants
 import com.yourcompany.recipecomposeapp.data.repository.RecipesRepository
 import com.yourcompany.recipecomposeapp.features.details.presentation.model.IngredientUiModel
 import com.yourcompany.recipecomposeapp.features.details.presentation.model.RecipeDetailsUiState
-import com.yourcompany.recipecomposeapp.features.details.presentation.model.toUiModel
 import com.yourcompany.recipecomposeapp.features.recipes.presentation.model.toUiModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -31,6 +31,7 @@ class RecipeDetailsViewModel(
 
     init {
         loadRecipe(recipeId)
+        observeFavorite()
     }
 
     fun loadRecipe(recipeId: Int) {
@@ -40,15 +41,17 @@ class RecipeDetailsViewModel(
             }
 
             try {
-                val recipe = repository.getRecipe(recipeId)
-                _uiState.update { currentState ->
-                    currentState.copy(
-                        recipe = recipe.toUiModel(),
-                        scaledIngredients = recipe.ingredients.map { it.toUiModel() },
-                        isLoading = false,
-                    )
-                }
-                observeFavorite()
+                repository.getRecipe(recipeId)
+                    .map { dto -> dto?.toUiModel() }
+                    .collect { recipe ->
+                        _uiState.update { currentState ->
+                            currentState.copy(
+                                recipe = recipe,
+                                scaledIngredients = recipe?.ingredients ?: emptyList(),
+                                isLoading = recipe == null,
+                            )
+                        }
+                    }
             } catch (e: Exception) {
                 _uiState.update { currentState ->
                     currentState.copy(isLoading = false, isError = e.message)
@@ -59,16 +62,14 @@ class RecipeDetailsViewModel(
 
     private fun observeFavorite() {
         viewModelScope.launch {
-            _uiState.value.recipe?.let { favoriteManager.isFavoriteFlow(it.id) }
-                ?.collect { isFavorite ->
+            favoriteManager.isFavoriteFlow(recipeId)
+                .collect { isFavorite ->
                     _uiState.update { it.copy(isFavorite = isFavorite) }
                 }
         }
     }
 
     fun toggleFavorite() {
-        val recipeId = _uiState.value.recipe?.id ?: return
-
         viewModelScope.launch {
             if (_uiState.value.isFavorite) {
                 favoriteManager.removeFavorite(recipeId)

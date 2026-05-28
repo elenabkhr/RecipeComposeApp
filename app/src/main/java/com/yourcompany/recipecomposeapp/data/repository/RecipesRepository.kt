@@ -7,5 +7,5 @@ import kotlinx.coroutines.flow.Flow
 interface RecipesRepository {
     fun getCategories(): Flow<List<CategoryDto>>
     fun getRecipesByCategories(categoryId: Int): Flow<List<RecipeDto>>
-    suspend fun getRecipe(recipeId: Int): RecipeDto
+    fun getRecipe(recipeId: Int): Flow<RecipeDto?>
 }

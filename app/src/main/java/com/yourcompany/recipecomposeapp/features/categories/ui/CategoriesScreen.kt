@@ -118,13 +118,9 @@ private fun CategoriesScreenPreviewLight() {
                     return flowOf(emptyList())
                 }
 
-                override suspend fun getRecipe(recipeId: Int): RecipeDto = RecipeDto(
-                    id = 0,
-                    title = "title",
-                    ingredients = emptyList(),
-                    method = emptyList(),
-                    imageUrl = "imageUrl"
-                )
+                override fun getRecipe(recipeId: Int): Flow<RecipeDto> {
+                    return flowOf()
+                }
             }
         )
     }
@@ -146,13 +142,9 @@ private fun CategoriesScreenPreviewDark() {
                     return flowOf(emptyList())
                 }
 
-                override suspend fun getRecipe(recipeId: Int): RecipeDto = RecipeDto(
-                    id = 0,
-                    title = "title",
-                    ingredients = emptyList(),
-                    method = emptyList(),
-                    imageUrl = "imageUrl"
-                )
+                override fun getRecipe(recipeId: Int): Flow<RecipeDto> {
+                    return flowOf()
+                }
             }
         )
     }

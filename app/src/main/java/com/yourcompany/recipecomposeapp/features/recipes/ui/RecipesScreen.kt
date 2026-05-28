@@ -17,22 +17,34 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.SavedStateHandle
 import com.yourcompany.recipecomposeapp.R
 import com.yourcompany.recipecomposeapp.core.ui.ScreenHeader
-import com.yourcompany.recipecomposeapp.features.recipes.presentation.RecipesViewModel
+import com.yourcompany.recipecomposeapp.di.RecipeApplication
+import com.yourcompany.recipecomposeapp.di.RecipesViewModelFactory
 import com.yourcompany.recipecomposeapp.ui.theme.RecipesAppTheme
 import com.yourcompany.recipecomposeapp.ui.theme.recipesAppTypography
 
 @Composable
 fun RecipesScreen(
+    savedStateHandle: SavedStateHandle,
     onRecipeClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: RecipesViewModel,
 ) {
+    val appContainer = (LocalContext.current.applicationContext as RecipeApplication).appContainer
+
+    val viewModel = remember {
+        RecipesViewModelFactory(
+            savedStateHandle = savedStateHandle,
+            appContainer.recipesRepository
+        ).create()
+    }
+
     val uiState by viewModel.uiState.collectAsState()
 
     Column(modifier = modifier) {
@@ -92,9 +104,9 @@ fun RecipesScreen(
 private fun RecipesScreenPreviewLight() {
     RecipesAppTheme(darkTheme = false) {
         RecipesScreen(
+            savedStateHandle = SavedStateHandle(),
             onRecipeClick = {},
             modifier = Modifier.fillMaxSize(),
-            viewModel = viewModel(),
         )
     }
 }
@@ -104,9 +116,9 @@ private fun RecipesScreenPreviewLight() {
 private fun RecipesScreenPreviewDark() {
     RecipesAppTheme(darkTheme = true) {
         RecipesScreen(
+            savedStateHandle = SavedStateHandle(),
             onRecipeClick = {},
             modifier = Modifier.fillMaxSize(),
-            viewModel = viewModel(),
         )
     }
 }

@@ -1,82 +1,31 @@
 package com.yourcompany.recipecomposeapp
 
-import android.app.Application
 import android.content.Intent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavType
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-import com.yourcompany.recipecomposeapp.data.network.NetworkConfig
-import com.yourcompany.recipecomposeapp.data.network.api.RecipesApiService
 import com.yourcompany.recipecomposeapp.features.categories.ui.CategoriesScreen
 import com.yourcompany.recipecomposeapp.features.details.ui.RecipeDetailsScreen
 import com.yourcompany.recipecomposeapp.features.favorites.ui.FavoritesScreen
 import com.yourcompany.recipecomposeapp.core.ui.BottomNavigation
 import com.yourcompany.recipecomposeapp.core.ui.Destination
 import com.yourcompany.recipecomposeapp.data.Constants
-import com.yourcompany.recipecomposeapp.data.database.RecipesDatabase
-import com.yourcompany.recipecomposeapp.data.repository.RecipesRepositoryImpl
-import com.yourcompany.recipecomposeapp.features.details.presentation.RecipeDetailsViewModel
-import com.yourcompany.recipecomposeapp.features.favorites.presentation.FavoritesViewModel
-import com.yourcompany.recipecomposeapp.features.recipes.presentation.RecipesViewModel
 import com.yourcompany.recipecomposeapp.features.recipes.ui.RecipesScreen
 import com.yourcompany.recipecomposeapp.ui.theme.RecipesAppTheme
 import kotlinx.coroutines.delay
-import kotlinx.serialization.json.Json
-import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Retrofit
-import java.util.concurrent.TimeUnit
 
 @Composable
 fun RecipesApp(deepLinkIntent: Intent?) {
     val navController = rememberNavController()
-
-    val context = LocalContext.current
-    val database = remember { RecipesDatabase.buildDatabase(context) }
-
-    val logging = remember {
-        HttpLoggingInterceptor().apply {
-            level = if (BuildConfig.DEBUG) {
-                HttpLoggingInterceptor.Level.BODY
-            } else {
-                HttpLoggingInterceptor.Level.NONE
-            }
-        }
-    }
-
-    val okHttpClient = remember {
-        OkHttpClient.Builder()
-            .connectTimeout(15, TimeUnit.SECONDS)
-            .readTimeout(30, TimeUnit.SECONDS)
-            .writeTimeout(30, TimeUnit.SECONDS)
-            .addInterceptor(logging)
-            .build()
-    }
-
-    val json = remember { Json { ignoreUnknownKeys = true; coerceInputValues = true } }
-    val retrofit = remember {
-        Retrofit.Builder()
-            .baseUrl(NetworkConfig.BASE_URL)
-            .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
-            .client(okHttpClient)
-            .build()
-    }
-    val apiService: RecipesApiService = remember { retrofit.create(RecipesApiService::class.java) }
-
-    val repository = remember { RecipesRepositoryImpl(apiService, database) }
 
     LaunchedEffect(deepLinkIntent) {
         deepLinkIntent?.data?.let { uri ->
@@ -118,7 +67,6 @@ fun RecipesApp(deepLinkIntent: Intent?) {
             ) {
                 composable(route = Destination.Categories.route) {
                     CategoriesScreen(
-                        repository = repository,
                         onCategoryClick = { categoryId, categoryTitle, categoryImageUrl ->
                             navController.navigate(
                                 Destination.Recipes.createRecipesRoute(
@@ -131,14 +79,8 @@ fun RecipesApp(deepLinkIntent: Intent?) {
                     )
                 }
 
-                composable(route = Destination.Favorites.route) { backStackEntry ->
-                    val context = LocalContext.current
-                    val viewModel: FavoritesViewModel = remember(backStackEntry) {
-                        FavoritesViewModel(context.applicationContext as Application, repository)
-                    }
-
+                composable(route = Destination.Favorites.route) {
                     FavoritesScreen(
-                        viewModel = viewModel,
                         onRecipeClick = { recipeId ->
                             navController.navigate(
                                 Destination.RecipeDetails.createDetailsRoute(recipeId)
@@ -157,11 +99,9 @@ fun RecipesApp(deepLinkIntent: Intent?) {
                         }),
                 ) { backStackEntry ->
                     val savedStateHandle = backStackEntry.savedStateHandle
-                    val viewModel: RecipesViewModel = remember(backStackEntry) {
-                        RecipesViewModel(savedStateHandle, repository)
-                    }
+
                     RecipesScreen(
-                        viewModel = viewModel,
+                        savedStateHandle = savedStateHandle,
                         onRecipeClick = { recipeId ->
                             navController.navigate(
                                 Destination.RecipeDetails.createDetailsRoute(recipeId)
@@ -174,16 +114,9 @@ fun RecipesApp(deepLinkIntent: Intent?) {
                     route = Destination.RecipeDetails.route,
                     arguments = listOf(navArgument("recipeId") { type = NavType.IntType })
                 ) { backStackEntry ->
-                    val context = LocalContext.current
                     val savedStateHandle = backStackEntry.savedStateHandle
-                    val viewModel = remember(backStackEntry) {
-                        RecipeDetailsViewModel(
-                            context.applicationContext as Application,
-                            savedStateHandle,
-                            repository,
-                        )
-                    }
-                    RecipeDetailsScreen(viewModel = viewModel)
+
+                    RecipeDetailsScreen(savedStateHandle = savedStateHandle)
                 }
             }
         }

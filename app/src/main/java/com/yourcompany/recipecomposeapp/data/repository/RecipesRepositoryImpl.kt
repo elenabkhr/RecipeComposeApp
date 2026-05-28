@@ -1,7 +1,7 @@
 package com.yourcompany.recipecomposeapp.data.repository
 
 import android.util.Log
-import com.yourcompany.recipecomposeapp.core.network.api.RecipesApiService
+import com.yourcompany.recipecomposeapp.data.network.api.RecipesApiService
 import com.yourcompany.recipecomposeapp.data.database.RecipesDatabase
 import com.yourcompany.recipecomposeapp.data.model.CategoryDto
 import com.yourcompany.recipecomposeapp.data.model.RecipeDto
@@ -29,7 +29,7 @@ class RecipesRepositoryImpl(
                 categoryDao.insertCategories(fresh.map { it.toEntity() })
                 Log.d("!!!", "Обновлено ${fresh.size} категорий")
             } catch (e: IOException) {
-                Log.e("!!!", "Ошибка сетевого запроса `getCategories`", e)
+                Log.e("!!!", "Ошибка обновления `getCategories`", e)
             }
         }
         return categoryDao.getAllCategories().map { entities -> entities.map { it.toDto() } }
@@ -42,7 +42,7 @@ class RecipesRepositoryImpl(
                 recipeDao.insertRecipes(fresh.map { it.toEntity(categoryId) })
                 Log.d("!!!", "Обновлено ${fresh.size} рецептов")
             } catch (e: IOException) {
-                Log.e("!!!", "Ошибка сетевого запроса `getRecipesByCategories`", e)
+                Log.e("!!!", "Ошибка обновления `getRecipesByCategories`", e)
             }
         }
         return recipeDao.getRecipesByCategory(categoryId)

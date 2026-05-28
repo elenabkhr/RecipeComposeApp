@@ -1,4 +1,4 @@
-package com.yourcompany.recipecomposeapp.features.favorites.presentation
+package com.yourcompany.recipecomposeapp.features.favorites.presentation.model
 
 import com.yourcompany.recipecomposeapp.features.recipes.presentation.model.RecipeUiModel
 

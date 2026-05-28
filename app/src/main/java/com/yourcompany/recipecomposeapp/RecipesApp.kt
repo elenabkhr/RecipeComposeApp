@@ -17,8 +17,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-import com.yourcompany.recipecomposeapp.core.network.NetworkConfig
-import com.yourcompany.recipecomposeapp.core.network.api.RecipesApiService
+import com.yourcompany.recipecomposeapp.data.network.NetworkConfig
+import com.yourcompany.recipecomposeapp.data.network.api.RecipesApiService
 import com.yourcompany.recipecomposeapp.features.categories.ui.CategoriesScreen
 import com.yourcompany.recipecomposeapp.features.details.ui.RecipeDetailsScreen
 import com.yourcompany.recipecomposeapp.features.favorites.ui.FavoritesScreen

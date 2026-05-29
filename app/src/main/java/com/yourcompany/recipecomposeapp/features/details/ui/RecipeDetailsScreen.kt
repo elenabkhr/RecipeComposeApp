@@ -1,6 +1,5 @@
 package com.yourcompany.recipecomposeapp.features.details.ui
 
-import android.app.Application
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,37 +17,24 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.SavedStateHandle
 import com.yourcompany.recipecomposeapp.R
 import com.yourcompany.recipecomposeapp.core.ui.ScreenHeader
 import com.yourcompany.recipecomposeapp.features.details.presentation.model.IngredientUiModel
 import com.yourcompany.recipecomposeapp.ui.theme.recipesAppTypography
 import com.yourcompany.recipecomposeapp.core.utils.shareRecipe
-import com.yourcompany.recipecomposeapp.di.RecipeApplication
-import com.yourcompany.recipecomposeapp.di.RecipeDetailsViewModelFactory
+import com.yourcompany.recipecomposeapp.features.details.presentation.RecipeDetailsViewModel
 
 @Composable
 fun RecipeDetailsScreen(
-    savedStateHandle: SavedStateHandle,
+    viewModel: RecipeDetailsViewModel,
     modifier: Modifier = Modifier,
 ) {
-    val appContainer = (LocalContext.current.applicationContext as RecipeApplication).appContainer
-    val application = LocalContext.current.applicationContext as Application
-
-    val viewModel = remember {
-        RecipeDetailsViewModelFactory(
-            application = application,
-            savedStateHandle = savedStateHandle,
-            appContainer.recipesRepository
-        ).create()
-    }
     val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
 

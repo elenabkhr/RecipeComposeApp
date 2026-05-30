@@ -29,9 +29,9 @@ import com.yourcompany.recipecomposeapp.ui.theme.recipesAppTypography
 
 @Composable
 fun RecipesScreen(
+    viewModel: RecipesViewModel,
     onRecipeClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: RecipesViewModel,
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
@@ -92,9 +92,9 @@ fun RecipesScreen(
 private fun RecipesScreenPreviewLight() {
     RecipesAppTheme(darkTheme = false) {
         RecipesScreen(
+            viewModel = viewModel(),
             onRecipeClick = {},
             modifier = Modifier.fillMaxSize(),
-            viewModel = viewModel(),
         )
     }
 }
@@ -104,9 +104,9 @@ private fun RecipesScreenPreviewLight() {
 private fun RecipesScreenPreviewDark() {
     RecipesAppTheme(darkTheme = true) {
         RecipesScreen(
+            viewModel = viewModel(),
             onRecipeClick = {},
             modifier = Modifier.fillMaxSize(),
-            viewModel = viewModel(),
         )
     }
 }

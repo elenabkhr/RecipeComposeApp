@@ -19,6 +19,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import com.yourcompany.recipecomposeapp.R
 import androidx.compose.ui.res.stringResource
@@ -27,22 +28,21 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.yourcompany.recipecomposeapp.ui.theme.RecipesAppTheme
 import com.yourcompany.recipecomposeapp.core.ui.ScreenHeader
-import com.yourcompany.recipecomposeapp.data.model.CategoryDto
-import com.yourcompany.recipecomposeapp.data.model.RecipeDto
-import com.yourcompany.recipecomposeapp.data.repository.RecipesRepository
+import com.yourcompany.recipecomposeapp.di.CategoriesViewModelFactory
+import com.yourcompany.recipecomposeapp.di.RecipeApplication
 import com.yourcompany.recipecomposeapp.features.categories.presentation.CategoriesViewModel
 import com.yourcompany.recipecomposeapp.ui.theme.recipesAppTypography
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
-import kotlin.collections.emptyList
 
 @Composable
 fun CategoriesScreen(
     modifier: Modifier = Modifier,
     onCategoryClick: (Int, String, String) -> Unit,
-    repository: RecipesRepository,
 ) {
-    val viewModel: CategoriesViewModel = remember { CategoriesViewModel(repository) }
+    val appContainer = (LocalContext.current.applicationContext as RecipeApplication).appContainer
+
+    val viewModel: CategoriesViewModel =
+        remember { CategoriesViewModelFactory(appContainer.recipesRepository).create() }
+
     val uiState by viewModel.uiState.collectAsState()
 
     Column(modifier = modifier) {
@@ -109,19 +109,6 @@ private fun CategoriesScreenPreviewLight() {
         CategoriesScreen(
             modifier = Modifier.fillMaxSize(),
             onCategoryClick = { _, _, _ -> },
-            repository = object : RecipesRepository {
-                override fun getCategories(): Flow<List<CategoryDto>> {
-                    return flowOf(emptyList())
-                }
-
-                override fun getRecipesByCategories(categoryId: Int): Flow<List<RecipeDto>> {
-                    return flowOf(emptyList())
-                }
-
-                override fun getRecipe(recipeId: Int): Flow<RecipeDto> {
-                    return flowOf()
-                }
-            }
         )
     }
 }
@@ -133,19 +120,6 @@ private fun CategoriesScreenPreviewDark() {
         CategoriesScreen(
             modifier = Modifier.fillMaxSize(),
             onCategoryClick = { _, _, _ -> },
-            repository = object : RecipesRepository {
-                override fun getCategories(): Flow<List<CategoryDto>> {
-                    return flowOf(emptyList())
-                }
-
-                override fun getRecipesByCategories(categoryId: Int): Flow<List<RecipeDto>> {
-                    return flowOf(emptyList())
-                }
-
-                override fun getRecipe(recipeId: Int): Flow<RecipeDto> {
-                    return flowOf()
-                }
-            }
         )
     }
 }

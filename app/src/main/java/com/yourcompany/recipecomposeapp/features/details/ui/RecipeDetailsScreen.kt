@@ -32,8 +32,8 @@ import com.yourcompany.recipecomposeapp.features.details.presentation.RecipeDeta
 
 @Composable
 fun RecipeDetailsScreen(
-    modifier: Modifier = Modifier,
     viewModel: RecipeDetailsViewModel,
+    modifier: Modifier = Modifier,
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current

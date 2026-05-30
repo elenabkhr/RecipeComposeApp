@@ -1,17 +1,14 @@
 package com.yourcompany.recipecomposeapp
 
-import android.app.Application
 import android.content.Intent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.SavedStateHandle
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.NavHost
@@ -23,9 +20,8 @@ import com.yourcompany.recipecomposeapp.features.favorites.ui.FavoritesScreen
 import com.yourcompany.recipecomposeapp.core.ui.BottomNavigation
 import com.yourcompany.recipecomposeapp.core.ui.Destination
 import com.yourcompany.recipecomposeapp.data.Constants
-import com.yourcompany.recipecomposeapp.di.RecipeApplication
-import com.yourcompany.recipecomposeapp.di.RecipeDetailsViewModelFactory
-import com.yourcompany.recipecomposeapp.di.RecipesViewModelFactory
+import com.yourcompany.recipecomposeapp.features.details.presentation.RecipeDetailsViewModel
+import com.yourcompany.recipecomposeapp.features.recipes.presentation.RecipesViewModel
 import com.yourcompany.recipecomposeapp.features.recipes.ui.RecipesScreen
 import com.yourcompany.recipecomposeapp.ui.theme.RecipesAppTheme
 import kotlinx.coroutines.delay
@@ -33,9 +29,6 @@ import kotlinx.coroutines.delay
 @Composable
 fun RecipesApp(deepLinkIntent: Intent?) {
     val navController = rememberNavController()
-
-    val appContainer = (LocalContext.current.applicationContext as RecipeApplication).appContainer
-    val application = LocalContext.current.applicationContext as Application
 
     LaunchedEffect(deepLinkIntent) {
         deepLinkIntent?.data?.let { uri ->
@@ -107,21 +100,11 @@ fun RecipesApp(deepLinkIntent: Intent?) {
                         navArgument(Constants.KEY_CATEGORY_IMAGE_URL) {
                             type = NavType.StringType
                         }),
-                ) { backStackEntry ->
-                    val savedStateHandle = remember(backStackEntry) {
-                        SavedStateHandle().apply {
-                            backStackEntry.arguments?.let { bundle ->
-                                bundle.keySet().forEach { key -> set(key, bundle.get(key)) }
-                            }
-                        }
-                    }
+                ) {
+                    val viewModel: RecipesViewModel = hiltViewModel()
+
                     RecipesScreen(
-                        viewModel = remember {
-                            RecipesViewModelFactory(
-                                savedStateHandle = savedStateHandle,
-                                appContainer.recipesRepository
-                            ).create()
-                        },
+                        viewModel = viewModel,
                         onRecipeClick = { recipeId ->
                             navController.navigate(
                                 Destination.RecipeDetails.createDetailsRoute(recipeId)
@@ -133,21 +116,10 @@ fun RecipesApp(deepLinkIntent: Intent?) {
                 composable(
                     route = Destination.RecipeDetails.route,
                     arguments = listOf(navArgument("recipeId") { type = NavType.IntType })
-                ) { backStackEntry ->
-                    val savedStateHandle = remember(backStackEntry) {
-                        SavedStateHandle().apply {
-                            backStackEntry.arguments?.let { bundle ->
-                                bundle.keySet().forEach { key -> set(key, bundle.get(key)) }
-                            }
-                        }
-                    }
-                    RecipeDetailsScreen(viewModel = remember {
-                        RecipeDetailsViewModelFactory(
-                            application = application,
-                            savedStateHandle = savedStateHandle,
-                            appContainer.recipesRepository
-                        ).create()
-                    })
+                ) {
+                    val viewModel: RecipeDetailsViewModel = hiltViewModel()
+
+                    RecipeDetailsScreen(viewModel = viewModel)
                 }
             }
         }

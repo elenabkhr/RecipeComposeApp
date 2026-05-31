@@ -17,16 +17,19 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import java.util.concurrent.TimeUnit
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 class AppModule {
 
+    @Singleton
     @Provides
     fun provideDatabase(@ApplicationContext context: Context): RecipesDatabase {
         return RecipesDatabase.buildDatabase(context)
     }
 
+    @Singleton
     @Provides
     fun provideOkHttpClient(): OkHttpClient {
         val logging = HttpLoggingInterceptor().apply {
@@ -47,6 +50,7 @@ class AppModule {
         return okHttpClient
     }
 
+    @Singleton
     @Provides
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
         val json = Json { ignoreUnknownKeys = true; coerceInputValues = true }
@@ -60,6 +64,7 @@ class AppModule {
         return retrofit
     }
 
+    @Singleton
     @Provides
     fun provideApiService(retrofit: Retrofit): RecipesApiService {
         return retrofit.create(RecipesApiService::class.java)

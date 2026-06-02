@@ -1,8 +1,7 @@
 package com.yourcompany.recipecomposeapp.features.details.presentation
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yourcompany.recipecomposeapp.core.utils.FavoriteDataStoreManager
 import com.yourcompany.recipecomposeapp.data.Constants
@@ -10,19 +9,21 @@ import com.yourcompany.recipecomposeapp.data.repository.RecipesRepository
 import com.yourcompany.recipecomposeapp.features.details.presentation.model.IngredientUiModel
 import com.yourcompany.recipecomposeapp.features.details.presentation.model.RecipeDetailsUiState
 import com.yourcompany.recipecomposeapp.features.recipes.presentation.model.toUiModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class RecipeDetailsViewModel(
-    application: Application,
+@HiltViewModel
+class RecipeDetailsViewModel @Inject constructor(
+    private val favoriteManager: FavoriteDataStoreManager,
     savedStateHandle: SavedStateHandle,
     private val repository: RecipesRepository,
-) : AndroidViewModel(application) {
-    private val favoriteManager = FavoriteDataStoreManager(application)
+) : ViewModel() {
     private val recipeId = savedStateHandle.get<Int>(Constants.KEY_RECIPE_ID)
         ?: throw IllegalArgumentException("recipeId is required")
 

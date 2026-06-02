@@ -1,6 +1,5 @@
 package com.yourcompany.recipecomposeapp.features.favorites.ui
 
-import android.app.Application
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,19 +14,17 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.yourcompany.recipecomposeapp.R
 import com.yourcompany.recipecomposeapp.core.ui.ScreenHeader
-import com.yourcompany.recipecomposeapp.di.FavoritesViewModelFactory
-import com.yourcompany.recipecomposeapp.di.RecipeApplication
+import com.yourcompany.recipecomposeapp.features.favorites.presentation.FavoritesViewModel
 import com.yourcompany.recipecomposeapp.features.recipes.ui.RecipeItem
 import com.yourcompany.recipecomposeapp.ui.theme.RecipesAppTheme
 import com.yourcompany.recipecomposeapp.ui.theme.recipesAppTypography
@@ -37,12 +34,7 @@ fun FavoritesScreen(
     onRecipeClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val appContainer = (LocalContext.current.applicationContext as RecipeApplication).appContainer
-    val application = LocalContext.current.applicationContext as Application
-
-    val viewModel =
-        remember { FavoritesViewModelFactory(application, appContainer.recipesRepository).create() }
-
+    val viewModel: FavoritesViewModel = hiltViewModel()
     val uiState by viewModel.uiState.collectAsState()
 
     Column(modifier = modifier) {

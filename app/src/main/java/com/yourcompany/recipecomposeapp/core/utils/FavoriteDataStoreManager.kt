@@ -2,10 +2,14 @@ package com.yourcompany.recipecomposeapp.core.utils
 
 import android.content.Context
 import androidx.datastore.preferences.core.edit
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class FavoriteDataStoreManager(private val context: Context) {
+@Singleton
+class FavoriteDataStoreManager @Inject constructor(@param:ApplicationContext private val context: Context) {
 
     suspend fun addFavorite(recipeId: Int) {
         context.dataStore.edit { preferences ->

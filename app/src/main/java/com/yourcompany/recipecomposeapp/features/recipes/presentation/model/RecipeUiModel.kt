@@ -14,7 +14,7 @@ data class RecipeUiModel(
     val ingredients: List<IngredientUiModel>,
     val method: List<String>,
     val imageUrl: String,
-    val isFavorite: Boolean,
+    val isFavorite: Boolean = false,
     val servings: Int = 1,
 )
 

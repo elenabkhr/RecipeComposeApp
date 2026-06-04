@@ -9,10 +9,10 @@ import org.junit.Test
 class CategoryDtoTest {
     @Test
     fun `mapper maps empty title correctly`() {
-        val dto = CategoryTestFixtures.createCategoryDto(title = "Завтраки")
+        val dto = CategoryTestFixtures.createCategoryDto(title = "")
         val result = dto.toUiModel()
 
-        assertEquals("Завтраки", result.title)
+        assertEquals("", result.title)
     }
 
     @Test
@@ -26,7 +26,7 @@ class CategoryDtoTest {
     }
 
     @Test
-    fun `prepends base url to relative imageUrl`() {
+    fun `preserves full imageUrl starting with http`() {
         val dto =
             CategoryTestFixtures.createCategoryDto(imageUrl = Constants.IMAGES_BASE_URL + "pasta.jpg")
         val result = dto.toUiModel()
@@ -34,7 +34,7 @@ class CategoryDtoTest {
     }
 
     @Test
-    fun `preserves full imageUrl starting with http`() {
+    fun `prepends base url to relative imageUrl`() {
         val dto =
             CategoryTestFixtures.createCategoryDto(imageUrl = "pasta.jpg")
         val result = dto.toUiModel()

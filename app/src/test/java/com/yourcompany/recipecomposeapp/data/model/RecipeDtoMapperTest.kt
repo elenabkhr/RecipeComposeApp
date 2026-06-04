@@ -38,7 +38,7 @@ class RecipeDtoMapperTest {
     }
 
     @Test
-    fun `prepends base url to relative imageUrl`() {
+    fun `preserves full imageUrl starting with http`() {
         val dto =
             RecipeTestFixtures.createRecipeDto(imageUrl = Constants.IMAGES_BASE_URL + "pasta.jpg")
         val result = dto.toUiModel()
@@ -46,7 +46,7 @@ class RecipeDtoMapperTest {
     }
 
     @Test
-    fun `preserves full imageUrl starting with http`() {
+    fun `prepends base url to relative imageUrl`() {
         val dto =
             RecipeTestFixtures.createRecipeDto(imageUrl = "pasta.jpg")
         val result = dto.toUiModel()

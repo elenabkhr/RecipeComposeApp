@@ -118,6 +118,33 @@ class RecipesRepositoryTest {
     }
 
     @Test
+    fun `getRecipesByCategory still emits data when api throws exception`() = runTest {
+        every { recipeDao.getRecipesByCategory(1) } returns flowOf(
+            listOf(
+                RecipeEntity(
+                    id = 1,
+                    title = "Паста",
+                    categoryId = 1,
+                    imageUrl = "pasta.jpg",
+                    ingredients = """[
+                    {"quantity":"200","unitOfMeasure":"g","description":"Паста"}
+                    ]""",
+                    method = "Отварить|||Смешать",
+                )
+            )
+        )
+
+        coEvery { apiService.getRecipesByCategory(1) } throws IOException()
+
+        repository.getRecipesByCategories(1).test {
+            val recipes = awaitItem()
+            assertEquals(1, recipes.size)
+            assertEquals("Паста", recipes[0].title)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
     fun `getRecipe returns flow by recipeId`() = runTest {
         every { recipeDao.getRecipeById(1) } returns flowOf(
             RecipeEntity(
@@ -139,6 +166,30 @@ class RecipesRepositoryTest {
             val recipe = awaitItem()
             assertNotNull(recipe)
             assertEquals("Паста", recipe?.title)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `getRecipe still emits data when api throws exception`() = runTest {
+        every { recipeDao.getRecipeById(1) } returns flowOf(
+            RecipeEntity(
+                id = 1,
+                title = "Паста",
+                categoryId = 1,
+                imageUrl = "pasta.jpg",
+                ingredients = """[
+                    {"quantity":"200","unitOfMeasure":"g","description":"Паста"}
+                    ]""",
+                method = "Отварить|||Смешать",
+            )
+        )
+
+        coEvery { apiService.getRecipe(1) } throws IOException()
+
+        repository.getRecipe(1).test {
+            val recipes = awaitItem()
+            assertEquals("Паста", recipes?.title)
             cancelAndIgnoreRemainingEvents()
         }
     }

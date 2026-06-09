@@ -16,13 +16,19 @@ import io.mockk.just
 import io.mockk.mockk
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNotNull
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import okio.IOException
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class RecipesRepositoryTest {
     private val apiService = mockk<RecipesApiService>()
     private val database = mockk<RecipesDatabase>(relaxed = true)
@@ -33,13 +39,16 @@ class RecipesRepositoryTest {
 
     @Before
     fun setup() {
+        Dispatchers.setMain(UnconfinedTestDispatcher())
         every { database.categoryDao() } returns categoryDao
         every { database.recipeDao() } returns recipeDao
-        repository = RecipesRepositoryImpl(apiService, database)
+        repository =
+            RecipesRepositoryImpl(apiService, database, ioDispatcher = UnconfinedTestDispatcher())
     }
 
     @After
     fun tearDown() {
+        Dispatchers.resetMain()
         clearAllMocks()
     }
 

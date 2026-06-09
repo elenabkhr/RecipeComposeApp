@@ -7,6 +7,8 @@ import com.yourcompany.recipecomposeapp.data.model.CategoryDto
 import com.yourcompany.recipecomposeapp.data.model.RecipeDto
 import com.yourcompany.recipecomposeapp.data.model.toDto
 import com.yourcompany.recipecomposeapp.data.model.toEntity
+import com.yourcompany.recipecomposeapp.di.IoDispatcher
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -19,12 +21,13 @@ import javax.inject.Inject
 class RecipesRepositoryImpl @Inject constructor(
     private val apiService: RecipesApiService,
     database: RecipesDatabase,
+    @param: IoDispatcher private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : RecipesRepository {
     private val categoryDao = database.categoryDao()
     private val recipeDao = database.recipeDao()
 
     override fun getCategories(): Flow<List<CategoryDto>> {
-        CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(ioDispatcher).launch {
             try {
                 val fresh = apiService.getCategories()
                 categoryDao.insertCategories(fresh.map { it.toEntity() })
@@ -37,7 +40,7 @@ class RecipesRepositoryImpl @Inject constructor(
     }
 
     override fun getRecipesByCategories(categoryId: Int): Flow<List<RecipeDto>> {
-        CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(ioDispatcher).launch {
             try {
                 val fresh = apiService.getRecipesByCategory(categoryId)
                 recipeDao.insertRecipes(fresh.map { it.toEntity(categoryId) })
@@ -51,7 +54,7 @@ class RecipesRepositoryImpl @Inject constructor(
     }
 
     override fun getRecipe(recipeId: Int): Flow<RecipeDto?> {
-        CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(ioDispatcher).launch {
             try {
                 val categoryId = recipeDao.getRecipeById(recipeId).first()?.categoryId
                 val fresh = apiService.getRecipe(recipeId)

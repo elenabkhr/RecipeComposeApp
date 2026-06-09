@@ -1,5 +1,6 @@
 package com.yourcompany.recipecomposeapp.features.categories.presentation
 
+import app.cash.turbine.test
 import com.yourcompany.recipecomposeapp.data.repository.RecipesRepository
 import fixtures.CategoryTestFixtures
 import io.mockk.clearAllMocks
@@ -14,7 +15,6 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
@@ -49,10 +49,12 @@ class CategoriesViewModelTest {
 
         val viewModel = CategoriesViewModel(repository)
 
-        advanceUntilIdle()
-
-        assertEquals(3, viewModel.uiState.value.categories.size)
-        assertFalse(viewModel.uiState.value.isLoading)
+        viewModel.uiState.test {
+            val state = awaitItem()
+            assertEquals(3, state.categories.size)
+            assertFalse(state.isLoading)
+            cancelAndIgnoreRemainingEvents()
+        }
     }
 
     @Test
@@ -60,8 +62,12 @@ class CategoriesViewModelTest {
         every { repository.getCategories() } returns flowOf(emptyList())
         viewModel = CategoriesViewModel(repository)
 
-        assertTrue(viewModel.uiState.value.categories.isEmpty())
-        assertNull(viewModel.uiState.value.isError)
+        viewModel.uiState.test {
+            val state = awaitItem()
+            assertTrue(state.categories.isEmpty())
+            assertNull(state.isError)
+            cancelAndIgnoreRemainingEvents()
+        }
     }
 
     @Test
@@ -70,8 +76,9 @@ class CategoriesViewModelTest {
 
         viewModel = CategoriesViewModel(repository)
 
-        advanceUntilIdle()
-
-        assertEquals("Network error", viewModel.uiState.value.isError)
+        viewModel.uiState.test {
+            assertEquals("Network error", awaitItem().isError)
+            cancelAndIgnoreRemainingEvents()
+        }
     }
 }

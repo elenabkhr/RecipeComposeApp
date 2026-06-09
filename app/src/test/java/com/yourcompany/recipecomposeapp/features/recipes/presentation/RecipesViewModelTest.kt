@@ -1,9 +1,9 @@
 package com.yourcompany.recipecomposeapp.features.recipes.presentation
 
 import androidx.lifecycle.SavedStateHandle
+import app.cash.turbine.test
 import com.yourcompany.recipecomposeapp.data.Constants
 import fixtures.RecipeTestFixtures
-import kotlin.String
 import com.yourcompany.recipecomposeapp.data.repository.RecipesRepository
 import io.mockk.clearAllMocks
 import io.mockk.every
@@ -15,7 +15,6 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
@@ -52,10 +51,12 @@ class RecipesViewModelTest {
             categoryImageUrl = "image.jpg"
         )
 
-        advanceUntilIdle()
-
-        assertEquals(3, viewModel.uiState.value.recipes.size)
-        assertFalse(viewModel.uiState.value.isLoading)
+        viewModel.uiState.test {
+            val state = awaitItem()
+            assertEquals(3, state.recipes.size)
+            assertFalse(state.isLoading)
+            cancelAndIgnoreRemainingEvents()
+        }
     }
 
     @Test
@@ -64,9 +65,10 @@ class RecipesViewModelTest {
 
         viewModel = createViewModel(categoryTitle = "Завтраки")
 
-        advanceUntilIdle()
-
-        assertEquals("Завтраки", viewModel.uiState.value.categoryTitle)
+        viewModel.uiState.test {
+            assertEquals("Завтраки", awaitItem().categoryTitle)
+            cancelAndIgnoreRemainingEvents()
+        }
     }
 
     @Test
@@ -75,9 +77,10 @@ class RecipesViewModelTest {
 
         viewModel = createViewModel()
 
-        advanceUntilIdle()
-
-        assertEquals("Network error", viewModel.uiState.value.isError)
+        viewModel.uiState.test {
+            assertEquals("Network error", awaitItem().isError)
+            cancelAndIgnoreRemainingEvents()
+        }
     }
 
     private fun createViewModel(

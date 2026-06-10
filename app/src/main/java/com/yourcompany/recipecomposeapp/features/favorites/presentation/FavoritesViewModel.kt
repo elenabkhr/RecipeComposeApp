@@ -48,6 +48,10 @@ class FavoritesViewModel @Inject constructor(
                                 .map { dto -> dto?.toUiModel() }
 
                         } catch (e: NumberFormatException) {
+                            _uiState.update { currentState ->
+                                currentState.copy(isLoading = false, isError = "Network error")
+                            }
+
                             Log.e("FavoritesViewModel", "Failed to get recipes by ids", e)
                             null
                         }

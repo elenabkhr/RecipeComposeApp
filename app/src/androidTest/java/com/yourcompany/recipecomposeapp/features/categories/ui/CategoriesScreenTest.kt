@@ -5,13 +5,16 @@ import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yourcompany.recipecomposeapp.features.categories.presentation.model.CategoriesUiState
 import com.yourcompany.recipecomposeapp.features.categories.presentation.model.CategoryUiModel
 import junit.framework.TestCase.assertEquals
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
 
-class CategoriesContentTest {
+@RunWith(AndroidJUnit4::class)
+class CategoriesScreenTest {
 
     @get:Rule
     val composeTestRule = createComposeRule()

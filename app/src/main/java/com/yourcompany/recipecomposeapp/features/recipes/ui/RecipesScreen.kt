@@ -18,12 +18,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.yourcompany.recipecomposeapp.R
 import com.yourcompany.recipecomposeapp.core.ui.ScreenHeader
 import com.yourcompany.recipecomposeapp.features.recipes.presentation.RecipesViewModel
+import com.yourcompany.recipecomposeapp.features.recipes.presentation.model.RecipesUiState
 import com.yourcompany.recipecomposeapp.ui.theme.RecipesAppTheme
 import com.yourcompany.recipecomposeapp.ui.theme.recipesAppTypography
 
@@ -34,7 +36,15 @@ fun RecipesScreen(
     modifier: Modifier = Modifier,
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    RecipesContent(uiState, onRecipeClick, modifier)
+}
 
+@Composable
+fun RecipesContent(
+    uiState: RecipesUiState,
+    onRecipeClick: (Int) -> Unit,
+    modifier: Modifier = Modifier,
+) {
     Column(modifier = modifier) {
         ScreenHeader(
             text = uiState.categoryTitle,
@@ -46,7 +56,7 @@ fun RecipesScreen(
                 Box(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center,
-                ) { CircularProgressIndicator() }
+                ) { CircularProgressIndicator(modifier = Modifier.testTag("loading_indicator")) }
             }
 
             uiState.isError != null || uiState.isEmpty -> {
@@ -66,6 +76,9 @@ fun RecipesScreen(
                         color = MaterialTheme.colorScheme.onSecondary,
                         style = recipesAppTypography.labelLarge,
                         textAlign = TextAlign.Center,
+                        modifier =
+                            if (uiState.isError != null) Modifier.testTag("error_message")
+                            else Modifier.testTag("empty_state")
                     )
                 }
             }

@@ -18,6 +18,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import com.yourcompany.recipecomposeapp.R
 import androidx.compose.ui.res.stringResource
@@ -28,16 +29,25 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.yourcompany.recipecomposeapp.ui.theme.RecipesAppTheme
 import com.yourcompany.recipecomposeapp.core.ui.ScreenHeader
 import com.yourcompany.recipecomposeapp.features.categories.presentation.CategoriesViewModel
+import com.yourcompany.recipecomposeapp.features.categories.presentation.model.CategoriesUiState
 import com.yourcompany.recipecomposeapp.ui.theme.recipesAppTypography
 
 @Composable
 fun CategoriesScreen(
-    modifier: Modifier = Modifier,
     onCategoryClick: (Int, String, String) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val viewModel: CategoriesViewModel = hiltViewModel()
     val uiState by viewModel.uiState.collectAsState()
+    CategoriesContent(uiState, onCategoryClick, modifier)
+}
 
+@Composable
+fun CategoriesContent(
+    uiState: CategoriesUiState,
+    onCategoryClick: (Int, String, String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
     Column(modifier = modifier) {
         ScreenHeader(
             text = stringResource(id = R.string.categories),
@@ -49,11 +59,11 @@ fun CategoriesScreen(
                 Box(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center,
-                ) { CircularProgressIndicator() }
+                ) { CircularProgressIndicator(modifier = Modifier.testTag("loading_indicator")) }
             }
 
             uiState.isError != null -> {
-                uiState.isError?.let { error ->
+                uiState.isError.let { error ->
                     Log.e("CategoriesScreen", error)
                 }
 
@@ -68,6 +78,7 @@ fun CategoriesScreen(
                         color = MaterialTheme.colorScheme.onSecondary,
                         style = recipesAppTypography.labelLarge,
                         textAlign = TextAlign.Center,
+                        modifier = Modifier.testTag("error_message")
                     )
                 }
             }

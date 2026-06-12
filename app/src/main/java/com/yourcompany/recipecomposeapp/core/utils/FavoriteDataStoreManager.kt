@@ -27,15 +27,16 @@ class FavoriteDataStoreManager @Inject constructor(@param:ApplicationContext pri
         }
     }
 
-    fun getFavoriteIdsFlow(): Flow<Set<String>> {
+    fun getFavoriteIdsFlow(): Flow<Set<Int>> {
         return context.dataStore.data.map { preferences ->
-            preferences[PreferencesKeys.FAVORITE_RECIPE_IDS] ?: emptySet()
+            preferences[PreferencesKeys.FAVORITE_RECIPE_IDS]?.mapNotNull { it.toIntOrNull() }
+                ?.toSet() ?: emptySet()
         }
     }
 
     fun isFavoriteFlow(recipeId: Int): Flow<Boolean> {
         return getFavoriteIdsFlow().map { favorites ->
-            favorites.contains(recipeId.toString())
+            favorites.contains(recipeId)
         }
     }
 }

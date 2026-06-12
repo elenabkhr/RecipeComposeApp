@@ -44,7 +44,7 @@ class FavoritesViewModel @Inject constructor(
                 .flatMapLatest { ids ->
                     val recipeFlows = ids.mapNotNull {
                         try {
-                            repository.getRecipe(it.toInt())
+                            repository.getRecipe(it)
                                 .map { dto -> dto?.toUiModel() }
 
                         } catch (e: NumberFormatException) {

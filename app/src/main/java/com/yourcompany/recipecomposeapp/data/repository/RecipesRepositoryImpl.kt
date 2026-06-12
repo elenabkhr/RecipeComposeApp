@@ -15,13 +15,12 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import java.io.IOException
 import javax.inject.Inject
 
 class RecipesRepositoryImpl @Inject constructor(
     private val apiService: RecipesApiService,
     database: RecipesDatabase,
-    @param: IoDispatcher private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
+    @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : RecipesRepository {
     private val categoryDao = database.categoryDao()
     private val recipeDao = database.recipeDao()
@@ -32,7 +31,7 @@ class RecipesRepositoryImpl @Inject constructor(
                 val fresh = apiService.getCategories()
                 categoryDao.insertCategories(fresh.map { it.toEntity() })
                 Log.d("!!!", "Обновлено ${fresh.size} категорий")
-            } catch (e: IOException) {
+            } catch (e: Exception) {
                 Log.e("!!!", "Ошибка обновления `getCategories`", e)
             }
         }
@@ -45,7 +44,7 @@ class RecipesRepositoryImpl @Inject constructor(
                 val fresh = apiService.getRecipesByCategory(categoryId)
                 recipeDao.insertRecipes(fresh.map { it.toEntity(categoryId) })
                 Log.d("!!!", "Обновлено ${fresh.size} рецептов")
-            } catch (e: IOException) {
+            } catch (e: Exception) {
                 Log.e("!!!", "Ошибка обновления `getRecipesByCategories`", e)
             }
         }
@@ -60,7 +59,7 @@ class RecipesRepositoryImpl @Inject constructor(
                 val fresh = apiService.getRecipe(recipeId)
                 recipeDao.insertRecipe(fresh.toEntity(categoryId))
                 Log.d("!!!", "Детали рецепта получены из API")
-            } catch (e: IOException) {
+            } catch (e: Exception) {
                 Log.e("!!!", "Ошибка обновления: ${e.message}")
             }
         }

@@ -48,7 +48,7 @@ fun CategoriesContent(
     onCategoryClick: (Int, String, String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(modifier = modifier) {
+    Column(modifier = modifier.testTag("categories_screen")) {
         ScreenHeader(
             text = stringResource(id = R.string.categories),
             painter = painterResource(id = R.drawable.bcg_categories),
@@ -93,7 +93,7 @@ fun CategoriesContent(
                 ),
                 verticalArrangement = Arrangement.spacedBy(16.dp),
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxSize().testTag("categories_grid")
             ) {
                 items(uiState.categories, key = { it.id }) { category ->
                     CategoryItem(

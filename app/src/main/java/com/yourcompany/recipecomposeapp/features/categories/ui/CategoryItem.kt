@@ -12,6 +12,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.yourcompany.recipecomposeapp.core.ui.RecipeImage
@@ -28,7 +29,8 @@ fun CategoryItem(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .height(220.dp),
+            .height(220.dp)
+            .testTag("category_item"),
         shape = RoundedCornerShape(8.dp),
         elevation = CardDefaults.cardElevation(2.dp),
         colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surface),

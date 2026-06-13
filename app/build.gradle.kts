@@ -59,6 +59,10 @@ android {
             isReturnDefaultValues = true
         }
     }
+
+    packaging {
+        resources.excludes.add("/META-INF/{LICENSE.md,LICENSE-notice.md}")
+    }
 }
 
 dependencies {
@@ -121,6 +125,16 @@ dependencies {
 
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     androidTestImplementation(platform(libs.androidx.compose.bom))
+
+    // Интеграционное тестирование
+    androidTestImplementation(libs.mockwebserver)
+    androidTestImplementation(libs.mock.android.testing)
+    androidTestImplementation(libs.room.testing)
+    androidTestImplementation(libs.hilt.android.testing)
+    androidTestImplementation(libs.coroutines.test)
+    androidTestImplementation(libs.turbine)
+
+    kspAndroidTest(libs.hilt.compiler)
 
     // Debug
     debugImplementation(libs.androidx.compose.ui.tooling)

@@ -7,7 +7,8 @@ import com.kaspersky.components.composesupport.config.withComposeSupport
 import com.kaspersky.kaspresso.kaspresso.Kaspresso
 import com.kaspersky.kaspresso.testcases.api.testcase.TestCase
 import com.yourcompany.recipecomposeapp.MainActivity
-import com.yourcompany.recipecomposeapp.features.recipes.ui.RecipesComposeScreen
+import com.yourcompany.recipecomposeapp.features.categories.screen.CategoriesComposeScreen
+import com.yourcompany.recipecomposeapp.features.recipes.screen.RecipesComposeScreen
 import io.github.kakaocup.compose.node.element.ComposeScreen.Companion.onComposeScreen
 import org.junit.Rule
 import org.junit.Test

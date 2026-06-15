@@ -45,7 +45,7 @@ fun RecipesContent(
     onRecipeClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(modifier = modifier) {
+    Column(modifier = modifier.testTag("recipes_screen")) {
         ScreenHeader(
             text = uiState.categoryTitle,
             imageUrl = uiState.categoryImageUrl,
